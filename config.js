@@ -1,1 +1,1 @@
-window.COACH_CONFIG = { api: 'https://gloypewcawndrjvplhq.supabase.co/functions/v1/coach/api' };
+window.COACH_CONFIG = { api: 'https://gloypewcawndrjvplhhq.supabase.co/functions/v1/coach/api' };
