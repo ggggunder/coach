@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>Тренировки</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>window.COACH_CONFIG = window.COACH_CONFIG || { api: 'https://gloypewcawndrjvplhq.supabase.co/functions/v1/coach/api' };</script>
+<script src="config.js"></script>
+<style>
+:root{--bg:#F2F3F5;--card:#fff;--ink:#111317;--muted:#5D636E;--soft:#8A909B;--line:#E4E6EA;--line2:#D5D8DE;--acc:#D4FF3A;--acc-ink:#3F4A12;--acc-soft:#EEF6C8;
+--ok:#1F6B3A;--ok-bg:#E3F6E8;--warn:#9A3412;--warn-bg:#FFF1E6;--warn-line:#E7C2A6;--bad:#B42318;--bad-bg:#FDE7E5;--blue:#1D4ED8;--blue-bg:#E3ECFF;--dot:#6E9BFF;
+--r:22px;--nav:66px;--safe:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
+body{min-height:100vh;overscroll-behavior-y:none}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none;padding:0}
+a{color:inherit}
+#app{max-width:560px;margin:0 auto;padding:16px 16px calc(var(--nav) + 40px + var(--safe));min-height:100vh}
+#app.no-nav{padding-bottom:calc(230px + var(--safe))}
+.row{display:flex;align-items:center;gap:10px}.col{display:flex;flex-direction:column}.grow{flex:1;min-width:0}.between{justify-content:space-between}
+.gap4{gap:4px}.gap6{gap:6px}.gap8{gap:8px}.gap12{gap:12px}.mt8{margin-top:8px}.mt10{margin-top:10px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}
+.muted{color:var(--muted)}.soft{color:var(--soft)}.b{font-weight:800}.sb{font-weight:700}.small{font-size:12px}.s13{font-size:13px}.s14{font-size:14px}.center{text-align:center}.nowrap{white-space:nowrap}.ellip{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.h1{font-size:26px;font-weight:800;letter-spacing:-.5px;margin:0}
+.h2{font-size:19px;font-weight:800;letter-spacing:-.3px;margin:0}
+.lbl{display:block;font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
+.top{display:flex;align-items:center;justify-content:space-between;min-height:44px;margin-bottom:12px;gap:8px}
+.card{background:var(--card);border-radius:var(--r);padding:16px}
+.card+.card,.card+.grid2,.grid2+.card{margin-top:10px}
+.dark{background:var(--ink);color:#fff}.dark .muted{color:#A3A8B3}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ibtn{width:44px;height:44px;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ibtn.dk{background:var(--ink);color:var(--acc)}
+.ibtn svg,.btn svg,.chip svg{flex-shrink:0}
+.btn{height:52px;border-radius:16px;padding:0 18px;font-weight:800;font-size:15px;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--ink);color:#fff;width:100%;transition:transform .12s}
+.btn:active,.ibtn:active,.chip:active,.slot:active{transform:scale(.97)}
+.btn.acc{background:var(--acc);color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+.btn.soft{background:var(--bg);color:var(--ink)}
+.btn.line{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px var(--line2)}
+.dark .btn.soft{background:rgba(255,255,255,.1);color:#fff}.dark .btn.line{box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.btn.warn{background:transparent;color:var(--warn);box-shadow:inset 0 0 0 1.5px var(--warn-line)}
+.btn.bad{background:var(--bad-bg);color:var(--bad)}
+.btn.sm{height:40px;border-radius:12px;font-size:13px;padding:0 12px;width:auto}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:0 16px}.chips::-webkit-scrollbar{display:none}
+.chip{height:36px;padding:0 14px;border-radius:999px;background:#fff;font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;flex-shrink:0}
+.chip.on{background:var(--ink);color:#fff;font-weight:700}
+.chip.out{background:#fff;box-shadow:inset 0 0 0 1px var(--line2)}
+.chip.warnc{background:var(--warn-bg);color:var(--warn);font-weight:800;box-shadow:inset 0 0 0 1px var(--warn-line)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--line);border-radius:14px;padding:4px;gap:4px;margin-bottom:12px}
+.seg button{height:36px;border-radius:11px;font-size:13px;font-weight:600;color:var(--muted)}
+.seg button.on{background:#fff;color:var(--ink);font-weight:800;box-shadow:0 1px 3px rgba(17,19,23,.08)}
+.pill{font-size:11px;font-weight:800;padding:4px 8px;border-radius:7px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
+.p-ok{color:var(--ok);background:var(--ok-bg)}.p-warn{color:var(--warn);background:var(--warn-bg)}.p-bad{color:var(--bad);background:var(--bad-bg)}.p-rep{color:var(--ink);background:var(--bg)}.p-on{color:var(--blue);background:var(--blue-bg)}.p-acc{background:var(--acc);color:var(--ink)}
+.dark .p-rep{background:rgba(255,255,255,.12);color:#fff}
+.av{border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--ink);overflow:hidden;background-size:cover;background-position:center}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + var(--safe));width:calc(100% - 32px);max-width:528px;height:var(--nav);background:var(--ink);border-radius:24px;display:grid;grid-auto-flow:column;grid-auto-columns:1fr;padding:6px;gap:4px;box-shadow:0 10px 30px rgba(17,19,23,.25);z-index:20}
+.nav button{border-radius:18px;color:#A3A8B3;font-size:11px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative}
+.nav button.on{background:var(--acc);color:var(--ink);font-weight:800}
+.nav .badge{position:absolute;top:6px;right:calc(50% - 20px);min-width:16px;height:16px;border-radius:8px;background:#E8590C;color:#fff;font-size:10px;line-height:16px;padding:0 4px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin-bottom:12px}
+.wd{height:68px;border-radius:16px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.wd .n{font-size:18px;font-weight:800}.wd .d{font-size:11px;font-weight:600;opacity:.75}
+.wd .c{font-size:10px;font-weight:800;min-width:18px;height:16px;line-height:16px;border-radius:8px;background:var(--line);color:var(--ink);padding:0 4px}
+.wd.on{background:var(--ink);color:#fff}.wd.on .c{background:var(--acc)}
+.wd.dim{background:transparent;color:var(--soft)}.wd.dim .c{background:transparent;color:var(--soft)}
+.wd.today:not(.on){box-shadow:inset 0 0 0 2px var(--ink)}
+.wd .bar{width:80%;height:4px;border-radius:2px;background:var(--line);overflow:hidden}.wd .bar i{display:block;height:100%;background:var(--ink)}.wd.on .bar{background:rgba(255,255,255,.2)}.wd.on .bar i{background:var(--acc)}
+.hrow{display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.hrow .tm{width:52px;flex-shrink:0;font-size:14px;font-weight:800}
+.slot{flex:1;min-width:0;min-height:50px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 14px;font-size:14px;font-weight:700;background:#fff;text-align:left;gap:8px}
+.slot .plus{width:34px;height:34px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.slot.busy{background:transparent;box-shadow:inset 0 0 0 1.5px var(--line2);color:var(--soft);font-weight:600;font-size:13px;cursor:default}
+.slot.past{background:transparent;color:var(--soft);font-weight:600;font-size:13px;cursor:default}
+.slot.sel{background:var(--ink);color:#fff;font-weight:800}
+.slot.sel .plus{background:var(--acc);border-radius:50%}
+.slot.mine{background:var(--acc);color:var(--ink);font-weight:800;box-shadow:inset 0 0 0 2px var(--ink)}
+.slot.grp{background:var(--acc-soft)}
+.slot.dash{background:transparent;box-shadow:inset 0 0 0 1.5px #C5C9D0;color:var(--muted);justify-content:center;font-size:13px}
+.brk{display:flex;align-items:center;gap:10px;margin:4px 0 10px;color:var(--soft);font-size:12px;font-weight:700}.brk:before,.brk:after{content:"";flex:1;height:1px;background:var(--line2)}
+.now{display:flex;align-items:center;gap:6px;margin:-2px 0 4px;font-size:11px;font-weight:800;color:var(--bad)}.now i{width:8px;height:8px;border-radius:50%;background:var(--bad)}.now b{flex:1;height:2px;background:var(--bad)}
+.tcard{flex:1;min-width:0;min-height:58px;border-radius:16px;background:#fff;display:flex;align-items:center;gap:10px;padding:8px 10px;text-align:left}
+.tcard.grp{background:var(--acc-soft)}.tcard.done{opacity:.6}
+.stack{display:flex;padding-left:8px}.stack .av{margin-left:-8px;border:2px solid var(--acc-soft)}
+.sheet-bg{position:fixed;inset:0;background:rgba(17,19,23,.45);z-index:40;opacity:0;transition:opacity .2s}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:100%;max-width:560px;max-height:88vh;overflow:auto;background:#fff;border-radius:28px 28px 0 0;padding:10px 16px calc(22px + var(--safe));z-index:41;transition:transform .25s cubic-bezier(.2,.8,.2,1);box-shadow:0 -10px 40px rgba(17,19,23,.2)}
+.sheet.show{transform:translate(-50%,0)}.sheet-bg.show{opacity:1}
+.grab{width:40px;height:5px;border-radius:3px;background:var(--line2);margin:0 auto 10px}
+.mini{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--nav) + 26px + var(--safe));width:calc(100% - 32px);max-width:528px;height:60px;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(17,19,23,.14);display:flex;align-items:center;gap:10px;padding:0 10px;z-index:19;text-align:left}
+.bar-bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:560px;background:#fff;border-radius:26px 26px 0 0;padding:16px 16px calc(18px + var(--safe));box-shadow:0 -8px 30px rgba(17,19,23,.1);z-index:25}
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.field>span{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.inp{height:48px;border-radius:14px;border:none;background:var(--bg);padding:0 14px;font-size:15px;width:100%;outline:none}
+textarea.inp{height:auto;padding:12px 14px;resize:none;line-height:1.4}
+.inp:focus{box-shadow:inset 0 0 0 2px var(--ink)}
+.card .inp{background:var(--bg)}
+.zones{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.zones button{height:44px;border-radius:14px;background:#fff;font-size:13px;font-weight:600}.zones button.on{background:var(--ink);color:#fff;font-weight:800}
+.lvl{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px}
+.lvl button{height:40px;border-radius:10px;background:#fff;font-size:13px;font-weight:800}.lvl button.fill{background:var(--acc)}.lvl button.on{background:var(--ink);color:#fff}
+.ex{display:flex;align-items:center;gap:10px;min-height:34px}
+.ex .no{width:24px;height:24px;border-radius:8px;background:var(--bg);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.alert{border-radius:12px;padding:8px 10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.a-warn{background:var(--warn-bg);color:var(--warn)}.a-bad{background:var(--bad-bg);color:var(--bad)}.a-ok{background:var(--ok-bg);color:var(--ok)}
+.feedday{text-align:center;font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 8px}
+.note{background:#fff;border-radius:20px;padding:14px;margin-bottom:8px}
+.lrow{display:flex;align-items:center;gap:12px;background:#fff;border-radius:18px;padding:10px 12px;margin-bottom:6px;width:100%;text-align:left}
+.segbar{display:grid;gap:5px}.segbar span{height:8px;border-radius:4px;background:var(--ink)}.segbar span.u{background:var(--line2)}
+.prog{height:10px;border-radius:5px;background:rgba(255,255,255,.14);overflow:hidden}.prog i{display:block;height:100%;border-radius:5px;background:var(--acc)}
+.prog.l{background:var(--line)}.prog.l i{background:var(--ink)}
+.toast{position:fixed;left:50%;top:14px;transform:translate(-50%,-120%);background:var(--ink);color:#fff;padding:12px 16px;border-radius:14px;font-size:14px;font-weight:700;z-index:60;transition:transform .25s;max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translate(-50%,0)}.toast.err{background:var(--bad)}
+.skel{background:linear-gradient(90deg,#e8eaed 25%,#f3f4f6 50%,#e8eaed 75%);background-size:200% 100%;animation:sk 1.2s infinite;border-radius:18px}
+@keyframes sk{to{background-position:-200% 0}}
+.empty{text-align:center;padding:28px 16px;color:var(--muted);font-weight:600;font-size:14px;line-height:1.5}
+.wgrid{display:grid;grid-template-columns:26px repeat(7,minmax(0,1fr))}
+.wcol{position:relative;border-left:1px solid var(--line)}
+.wb{position:absolute;left:2px;right:2px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;overflow:hidden}
+.wb.p{background:var(--ink);color:#fff}.wb.g{background:var(--acc);color:var(--ink)}.wb.f{box-shadow:inset 0 0 0 1.5px #C5C9D0;color:var(--soft);background:transparent}
+.wb .od{position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--dot)}
+.hatch{position:absolute;left:0;right:0;background:repeating-linear-gradient(135deg,#E9EBEE 0 4px,transparent 4px 8px)}
+.tog{width:50px;height:30px;border-radius:15px;background:var(--line2);position:relative;transition:background .2s;flex-shrink:0}
+.tog:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tog.on{background:var(--ink)}.tog.on:after{transform:translateX(20px)}
+.hidden{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+'use strict';
+const pl = (n, a, b, c) => { n = Math.abs(Number(n)); const m10 = n % 10, m100 = n % 100; return m10 === 1 && m100 !== 11 ? a : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? b : c; };
+const I18N = {
+  ru: {
+    dows: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
+    n_today: 'Сегодня', n_book: 'Запись', n_progress: 'Прогресс', n_notes: 'Заметки', n_schedule: 'Расписание', n_clients: 'Клиенты', n_pay: 'Оплаты', n_more: 'Ещё',
+    g_night: 'Доброй ночи', g_morning: 'Доброе утро', g_day: 'Добрый день', g_evening: 'Добрый вечер',
+    hello: (n) => `Привет${n ? ', ' + n : ''}!`, profile: 'Профиль', back: 'Назад', retry: 'Повторить', save: 'Сохранить', saved: 'Сохранено ✓', create: 'Создать', add: 'Добавить', edit: 'Изменить', delete: 'Удалить', delete_q: 'Удалить запись?', clear: 'Очистить', more: 'Показать ещё', send: 'Отправить', copy: 'Копировать', copied: 'Скопировано', share: 'Поделиться', you: 'Вы', today: 'Сегодня', yesterday: 'Вчера', min: 'мин', h: 'ч', kg: 'кг', cm: 'см', date: 'Дата', time: 'Время', value: 'Значение', comment: 'Комментарий', format: 'Формат', collapse: 'Свернуть', undo: 'Отменить отметку',
+    rel_now: 'Сейчас', rel_min: (n) => `Через ${n} мин`, rel_hours: (n) => `Через ${n} ${pl(n, 'час', 'часа', 'часов')}`, rel_tomorrow: 'Завтра', rel_days: (n) => `Через ${n} ${pl(n, 'день', 'дня', 'дней')}`,
+    personal: 'Персональная', personal_s: 'Личная', group: 'Группа', f_gym: 'в зале', f_online: 'онлайн', gym_s: 'Зал', online_s: 'Онлайн',
+    write_trainer: 'Написать тренеру', write: 'Написать', will_come: 'Подтвердить: буду', confirmed: 'Вы подтвердили участие', confirmed_s: 'подтвердил', move: 'Перенести', cancel: 'Отменить',
+    no_next: 'Пока нет записей', no_next_sub: 'Выбери удобное время — тренер сразу получит уведомление.', book_now: 'Записаться',
+    pkg_n: (n) => `Абонемент · ${n} ${pl(n, 'тренировка', 'тренировки', 'тренировок')}`, pkg_need_pay: 'Ожидает оплаты', pkg_wait_confirm: 'Ждём подтверждения тренера', pending: 'Проверяется', pay: 'Оплатить',
+    pkg_empty: 'Тренировки в абонементе закончились', pkg_last: 'Осталась 1 тренировка', pkg_ask: 'Попроси тренера оформить новый абонемент',
+    m_weight: 'Вес', m_waist: 'Талия', m_hips: 'Бёдра', m_chest: 'Грудь', m_fat: '% жира', add_weight: 'Добавь вес', streak: 'Серия', weeks: (n) => pl(n, 'неделя', 'недели', 'недель'), no_skips: 'без пропусков', streak_start: 'начнём на этой неделе',
+    next_ones: 'Дальше', has_plan: 'есть план', plan: 'План', plan_for: (d) => `План на ${d}`, plan_soon: 'План скоро будет', plan_soon_sub: 'Тренер составит план — он появится здесь, и придёт уведомление.', ex_n: (n) => `${n} ${pl(n, 'упражнение', 'упражнения', 'упражнений')}`, replaced: 'замена', all_plan: 'Весь план', wb_short: 'Самочувствие', hurts: 'Что-то болит?',
+    cmp_handled: (z) => `Тренер учёл жалобу: ${z}`, cmp_open: (z) => `Жалоба отправлена тренеру: ${z}`,
+    regular: 'Постоянная', one_time: 'Разовая', late_warn: (h) => `До тренировки меньше ${h} ч — при отмене она спишется с абонемента.`,
+    moving: (w) => `Перенос тренировки ${w} — выбери новое время`, prev_week: 'Прошлая неделя', next_week: 'Следующая неделя', day_off: 'Тренер не работает в этот день', break: 'перерыв',
+    waitlist: 'Сообщить, если освободится другое время', waitlist_full: 'Всё занято — сообщить, если освободится', waiting_on: 'Сообщим, если освободится время', wait_ok: 'Готово — напишем в бот, если окно освободится',
+    will_charge: (n) => `спишется 1 из ${n}`, move_here: 'Перенести сюда', book_btn: 'Записаться', cancel_rule: (h) => `Бесплатная отмена — не позже чем за ${h} ч`,
+    your_session: 'Ваша тренировка', busy: 'Занято', unavailable: 'Недоступно', spots_left: (n, c) => `осталось ${n} из ${c} мест`, full: 'мест нет', chosen: 'выбрано', free: 'Свободно',
+    rec_intro: 'Ходишь стабильно? Закрепи дни — эти часы будут держаться за тобой каждую неделю.', rec_days: 'Дни недели', rec_times: 'Время для каждого дня',
+    rec_conf: (n, d, s) => n === 1 ? `${d} занято${s ? ' — предложим ' + s : ''}` : `${n} ${pl(n, 'дата занята', 'даты заняты', 'дат занято')}${s ? ', предложим ' + s : ''}`, rec_ok: 'Свободно каждую неделю ✓',
+    rec_how_long: 'Как долго', weeks_n: (n) => `${n} ${pl(n, 'неделя', 'недели', 'недель')}`, until_stop: 'Пока не отменю', sessions_n: (n) => `${n} ${pl(n, 'тренировка', 'тренировки', 'тренировок')}`,
+    rec_take: 'Занятые даты — записать на предложенное время', rec_left: (n) => n > 0 ? `Абонемента хватит на ${n} — потом напомним продлить` : 'Абонемент закончился — тренер оформит новый', rec_nopkg: 'Абонемента пока нет — тренер оформит его',
+    rec_save: 'Закрепить расписание', rec_skip: 'Пропустить одну тренировку можно в любой момент — остальные останутся', rec_active: 'Постоянные записи', until: (d) => `до ${d}`, stop: 'Остановить', stop_q: 'Остановить постоянную запись?', stop_sub: 'Будущие тренировки по этому расписанию отменятся.', rec_done: (n) => `Готово: ${n} ${pl(n, 'тренировка', 'тренировки', 'тренировок')} в расписании`,
+    measure: 'Замер', for_period: 'за период', need_two: 'нужно минимум 2 замера', p_month: 'Мес', p_3m: '3 мес', p_all: 'Всё', goal: 'Цель', goal_sub: 'Тренер видит цель и помогает к ней идти', records: 'Рекорды', visits_n: (n) => `${n} ${pl(n, 'тренировка', 'тренировки', 'тренировок')}`, records_empty: 'Тренер отметит здесь твои рекорды',
+    chart_empty: 'Добавь хотя бы 2 замера — появится график', chart_label: 'График показателя', new_measure: 'Новый замер',
+    f_all: 'Все', f_trainer: 'От тренера', f_wb: 'Самочувствие', f_measure: 'Замеры', f_complaint: 'Жалобы', f_pkg: 'Абонемент', f_stale: 'Давно не были',
+    pinned: 'Закреплено тренером', notes_empty: 'Здесь будет общая лента: заметки, замеры, самочувствие', q_measure: '+ Замер', private: 'Только мне', q_weight: '+ Вес', q_wb: '+ Самочувствие', q_hurts: '+ Болит',
+    new_note: 'Новая заметка', note_ph: 'Заметка для тренера…', note_ph_tr: 'Заметка для клиента…', wb_title: 'Самочувствие', sleep_h: (n) => `Сон ${n} ч`, complaint: 'Жалоба', new_record: 'Новый рекорд', cmp_handled_note: (z) => `Тренер учёл жалобу (${z})`,
+    wb_q: 'Как ощущения?', wb_hint: '1 — тяжело, 5 — отлично', sleep: 'Сон, ч', wb_ph: 'Энергия, настроение, что беспокоит', wb_thanks: 'Спасибо! Тренер увидит',
+    z_neck: 'Шея', z_shl: 'Плечо Л', z_shr: 'Плечо П', z_back: 'Спина', z_low: 'Поясница', z_elbow: 'Локоть', z_wrist: 'Запястье', z_knl: 'Колено Л', z_knr: 'Колено П', z_ankle: 'Голеностоп', z_foot: 'Стопа', z_other: 'Другое',
+    w_rest: 'В покое', w_load: 'При нагрузке', w_after: 'После тренировки', cmp_title: 'Что беспокоит?', cmp_sub: 'Тренер увидит сразу и поправит план', where: 'Где', how_strong: (n) => `Насколько сильно · ${n} из 10`, when_hurts: 'Когда болит',
+    cmp_ph: 'Например: тянет при глубоком приседе', send_trainer: 'Отправить тренеру', cmp_doctor: 'Острая боль, отёк или онемение — сначала к врачу, тренировку лучше перенести.', cmp_sent: 'Отправлено тренеру',
+    your_trainer: 'Твой тренер', packages: 'Абонементы', paid: 'Оплачен', unpaid: 'Не оплачен', left_of: (a, b) => `осталось ${a} из ${b}`, expired: 'истёк', card_pay: 'Оплата на карту', i_paid: 'Я оплатил(а)', claim_ok: 'Тренер получит уведомление', no_packages: 'Абонемента пока нет — тренер оформит его.',
+    language: 'Язык', history: 'История', st_attended: 'была', st_noshow: 'пропуск', st_late_cancel: 'поздняя отмена',
+    ob_client: 'Я клиент', ob_client_sub: 'Открой ссылку-приглашение от тренера — или введи код из неё.', code: 'Код', code_ph: 'Код приглашения', join: 'Присоединиться',
+    ob_trainer: 'Я тренер', ob_trainer_sub: 'Создай кабинет: расписание, клиенты, абонементы. Ссылку для клиентов получишь сразу.', access_code: 'Код доступа', access_code_ph: 'Код доступа (если выдали)', become_trainer: 'Стать тренером',
+    settings: 'Настройки', new_group: 'Новая группа', v_day: 'День', v_week: 'Неделя', day_sum: (a, b) => `${a} ${pl(a, 'тренировка', 'тренировки', 'тренировок')} · ${b} ${pl(b, 'окно', 'окна', 'окон')}`,
+    day_is_off: 'Выходной день.', make_working: 'Сделать рабочим', no_hours: 'В этот день нет рабочих часов', set_hours: 'Настроить часы', make_off: 'Сделать выходным', free_book: 'Свободно — записать',
+    spots_of: (a, b) => `${a} из ${b}`, came: 'пришёл', noshow: 'Не пришёл', cmp_pill: (z) => `жалоба: ${z}`, left_n: (n) => `осталось ${n}`, no_pkg: 'без абонемента',
+    load: 'Загрузка недели', load_of: (a, b, p) => `${a} из ${b} · ${p}%`, plan_none: 'План ещё не составлен', make_plan: 'Составить', no_members: 'Пока никто не записался', cancel_session: 'Отменить тренировку',
+    card: 'Карточка', change_plan: 'Изменить план', handled: 'Учтено', done: 'Проведено',
+    copy_last: 'Прошлый', plan_title: 'Название', plan_title_ph: 'Например: Ноги и ягодицы', ex_ph: 'Упражнение', add_ex: 'Упражнение', plan_note: 'Комментарий', plan_note_ph: 'Разминка, темп, на что обратить внимание', save_notify: 'Сохранить',
+    free_window: 'Свободное окно', book_client: 'Записать клиента', no_clients: 'Пока нет клиентов', group_here: 'Создать группу в это время',
+    g_title: 'Название', g_title_ph: 'Функционал', g_cap: 'Мест', g_min: 'Минут', g_repeat: 'Повторять', g_once: 'Один раз',
+    invite: 'Пригласить', search: 'Поиск', search_ph: 'Имя или @ник', complaint_s: 'жалоба', paid_check: 'проверить оплату', renew: 'продлить', call_back: 'позвать',
+    last_visit: (d) => `был(а) ${d}`, no_clients_title: 'Пригласи первых клиентов', no_clients_sub: 'Отправь ссылку-приглашение — клиент откроет её и сразу попадёт к тебе.', send_invite: 'Отправить приглашение',
+    attention: 'Требуют внимания', all_clients: 'Все клиенты', nothing_found: 'Никого не нашли', client: 'Клиент', since: (d) => `с ${d}`, book_s: 'Записать', note_s: 'Заметки',
+    money_came: 'Деньги пришли', mark_paid: 'Отметить оплату', new_pkg: 'Новый абонемент', no_pkg_title: 'Нет абонемента', no_pkg_sub: 'Создай — клиенту придут реквизиты для оплаты', sessions_ahead: (n) => `${n} впереди`,
+    pinned_for: 'Закреп для клиента', pinned_ph: 'Например: колено справа — без выпадов', only_you: 'Видно только вам', private_ph: 'Личные заметки о клиенте', wb_trend: (n) => `Самочувствие · ${n}`, avg: (v) => `в среднем ${v} / 5`, no_data: 'нет данных',
+    goal_none: 'Цель не задана', add_record: 'Рекорд', notes_feed: 'Лента', pinned_hint: 'Клиент увидит это сверху ленты заметок.', private_hint: 'Клиент этого не увидит.',
+    sessions_count: 'Тренировок', valid: 'Срок', days_n: (n) => `${n} ${pl(n, 'день', 'дня', 'дней')}`, no_limit: 'Без срока', price: 'Сумма', already_paid: 'Уже оплачено', pkg_send_hint: 'Клиенту придут номер карты и кнопка «Я оплатил».', pkg_sent: 'Клиенту отправлены реквизиты',
+    pick_slot: 'Выбери свободное окно', no_free: 'На 2 недели свободных окон нет',
+    month_income: (m) => `Оплачено за ${m.toLowerCase()}`, month_sessions: (n) => `${n} ${pl(n, 'тренировка проведена', 'тренировки проведено', 'тренировок проведено')} в этом месяце`, wait_confirm: 'Ждут подтверждения', not_paid: 'Не оплачены', no_pkg_list: 'Записаны без абонемента', paid_recent: 'Оплачено', pay_empty: 'Здесь будут абонементы и оплаты', paid_ok: 'Оплата подтверждена',
+    invite_link: 'Ссылка для клиентов', clients_n: (n) => `${n} ${pl(n, 'клиент', 'клиента', 'клиентов')}`, s_title: 'Кто вы', s_title_ph: 'Персональный тренер', s_address: 'Адрес зала', s_address_ph: 'Улица, дом, зал',
+    s_payment: 'Оплата', s_card: 'Номер карты', s_card_name: 'Получатель', s_card_name_ph: 'Имя Ф.', s_rules: 'Правила записи', s_slot: 'Длительность тренировки', s_notice: 'Запись не позже чем за', s_cancel: 'Бесплатная отмена за',
+    s_hours: 'Рабочие часы', add_range: 'промежуток', day_off_s: 'выходной', days_off: 'Выходные дни',
+    exercise: 'Упражнение', result: 'Результат', rec_name_ph: 'Присед', metric: 'Показатель', target: 'Цель', until_date: 'К дате', goal_text: 'Как звучит цель', goal_ph: '−5 кг к весне',
+    archive: 'Убрать из клиентов', archive_q: 'Убрать клиента?', archive_sub: 'Он пропадёт из списка. Если снова откроет вашу ссылку — вернётся.',
+    join_group_q: 'Записаться в группу?', cancel_q: 'Отменить тренировку?', cancel_tr_sub: 'Клиент получит уведомление в Telegram.', cancel_session_q: 'Отменить тренировку?',
+    dayoff_q: 'Сделать день выходным?', dayoff_sub: 'Новые записи на этот день станут недоступны. Уже записанных отмените вручную.',
+    canceled: 'Тренировка отменена', canceled_late: 'Отменено. Тренировка списана — поздняя отмена', booked_ok: 'Записано ✓', moved_ok: 'Перенесено ✓', marked_done: 'Отмечено ✓', plan_saved: 'План сохранён — клиент получил уведомление',
+    group_ok: 'Группа создана', group_skipped: (a, b) => `Создано ${a}, пропущено ${b} — время занято`, no_prev_plan: 'Прошлых планов нет', move_hint: 'Отмени тренировку и запиши клиента на новое время в свободное окно',
+    cmp_handle_title: 'Жалоба учтена', cmp_handle_sub: 'Клиент получит сообщение. Можно коротко написать, что изменили.', cmp_handle_ph: 'Заменил выпады на ягодичный мост',
+    invite_text: 'Записывайся на тренировки через этого бота 💪', no_username: 'У пользователя нет @username — напишите ему через Telegram',
+    open_in_tg: 'Откройте в Telegram', open_in_tg_sub: 'Это приложение работает внутри Telegram-бота.',
+    err_server: 'Что-то пошло не так. Попробуйте ещё раз', err_load: 'Не удалось загрузить', err_auth: 'Откройте приложение заново из бота',
+    err_slot_taken: 'Это время уже заняли — выберите другое', err_slot_invalid: 'Это время недоступно', err_too_soon: 'Слишком поздно для записи на это время', err_too_far: 'Так далеко записаться нельзя', err_day_off: 'Тренер не работает в этот день',
+    err_too_late: 'До тренировки слишком мало времени', err_full: 'Мест больше нет', err_bad_input: 'Проверьте данные', err_not_found: 'Не найдено', err_too_many: 'Слишком много записей', err_forbidden: 'Нет доступа',
+    err_no_trainer: 'Сначала привяжитесь к тренеру', err_not_trainer: 'Только для тренера', err_bad_code: 'Код приглашения неверный', err_self: 'Это ваш собственный код', err_bad_status: 'Статус уже изменён', err_bad_hours: 'Проверьте рабочие часы', err_trainer_code: 'Неверный код доступа',
+  },
+  uk: {
+    dows: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
+    n_today: 'Сьогодні', n_book: 'Запис', n_progress: 'Прогрес', n_notes: 'Нотатки', n_schedule: 'Розклад', n_clients: 'Клієнти', n_pay: 'Оплати', n_more: 'Ще',
+    g_night: 'Доброї ночі', g_morning: 'Доброго ранку', g_day: 'Доброго дня', g_evening: 'Доброго вечора',
+    hello: (n) => `Привіт${n ? ', ' + n : ''}!`, profile: 'Профіль', back: 'Назад', retry: 'Повторити', save: 'Зберегти', saved: 'Збережено ✓', create: 'Створити', add: 'Додати', edit: 'Змінити', delete: 'Видалити', delete_q: 'Видалити запис?', clear: 'Очистити', more: 'Показати ще', send: 'Надіслати', copy: 'Копіювати', copied: 'Скопійовано', share: 'Поділитися', you: 'Ви', today: 'Сьогодні', yesterday: 'Вчора', min: 'хв', h: 'год', kg: 'кг', cm: 'см', date: 'Дата', time: 'Час', value: 'Значення', comment: 'Коментар', format: 'Формат', collapse: 'Згорнути', undo: 'Скасувати позначку',
+    rel_now: 'Зараз', rel_min: (n) => `Через ${n} хв`, rel_hours: (n) => `Через ${n} ${pl(n, 'годину', 'години', 'годин')}`, rel_tomorrow: 'Завтра', rel_days: (n) => `Через ${n} ${pl(n, 'день', 'дні', 'днів')}`,
+    personal: 'Персональне', personal_s: 'Особисте', group: 'Група', f_gym: 'у залі', f_online: 'онлайн', gym_s: 'Зал', online_s: 'Онлайн',
+    write_trainer: 'Написати тренеру', write: 'Написати', will_come: 'Підтвердити: буду', confirmed: 'Ви підтвердили участь', confirmed_s: 'підтвердив', move: 'Перенести', cancel: 'Скасувати',
+    no_next: 'Поки немає записів', no_next_sub: 'Обери зручний час — тренер одразу отримає сповіщення.', book_now: 'Записатися',
+    pkg_n: (n) => `Абонемент · ${n} ${pl(n, 'тренування', 'тренування', 'тренувань')}`, pkg_need_pay: 'Очікує оплати', pkg_wait_confirm: 'Чекаємо підтвердження тренера', pending: 'Перевіряється', pay: 'Оплатити',
+    pkg_empty: 'Тренування в абонементі закінчилися', pkg_last: 'Залишилось 1 тренування', pkg_ask: 'Попроси тренера оформити новий абонемент',
+    m_weight: 'Вага', m_waist: 'Талія', m_hips: 'Стегна', m_chest: 'Груди', m_fat: '% жиру', add_weight: 'Додай вагу', streak: 'Серія', weeks: (n) => pl(n, 'тиждень', 'тижні', 'тижнів'), no_skips: 'без пропусків', streak_start: 'почнемо цього тижня',
+    next_ones: 'Далі', has_plan: 'є план', plan: 'План', plan_for: (d) => `План на ${d}`, plan_soon: 'План скоро буде', plan_soon_sub: 'Тренер складе план — він з\'явиться тут, і прийде сповіщення.', ex_n: (n) => `${n} ${pl(n, 'вправа', 'вправи', 'вправ')}`, replaced: 'заміна', all_plan: 'Весь план', wb_short: 'Самопочуття', hurts: 'Щось болить?',
+    cmp_handled: (z) => `Тренер врахував скаргу: ${z}`, cmp_open: (z) => `Скаргу надіслано тренеру: ${z}`,
+    regular: 'Постійний', one_time: 'Разовий', late_warn: (h) => `До тренування менше ${h} год — у разі скасування воно спишеться з абонемента.`,
+    moving: (w) => `Перенесення тренування ${w} — обери новий час`, prev_week: 'Минулий тиждень', next_week: 'Наступний тиждень', day_off: 'Тренер не працює цього дня', break: 'перерва',
+    waitlist: 'Повідомити, якщо звільниться інший час', waitlist_full: 'Все зайнято — повідомити, якщо звільниться', waiting_on: 'Повідомимо, якщо звільниться час', wait_ok: 'Готово — напишемо в бот, якщо вікно звільниться',
+    will_charge: (n) => `спишеться 1 з ${n}`, move_here: 'Перенести сюди', book_btn: 'Записатися', cancel_rule: (h) => `Безкоштовне скасування — не пізніше ніж за ${h} год`,
+    your_session: 'Ваше тренування', busy: 'Зайнято', unavailable: 'Недоступно', spots_left: (n, c) => `залишилось ${n} з ${c} місць`, full: 'місць немає', chosen: 'обрано', free: 'Вільно',
+    rec_intro: 'Ходиш стабільно? Закріпи дні — ці години триматимуться за тобою щотижня.', rec_days: 'Дні тижня', rec_times: 'Час для кожного дня',
+    rec_conf: (n, d, s) => n === 1 ? `${d} зайнято${s ? ' — запропонуємо ' + s : ''}` : `${n} ${pl(n, 'дата зайнята', 'дати зайняті', 'дат зайнято')}${s ? ', запропонуємо ' + s : ''}`, rec_ok: 'Вільно щотижня ✓',
+    rec_how_long: 'Як довго', weeks_n: (n) => `${n} ${pl(n, 'тиждень', 'тижні', 'тижнів')}`, until_stop: 'Поки не скасую', sessions_n: (n) => `${n} ${pl(n, 'тренування', 'тренування', 'тренувань')}`,
+    rec_take: 'Зайняті дати — записати на запропонований час', rec_left: (n) => n > 0 ? `Абонемента вистачить на ${n} — потім нагадаємо продовжити` : 'Абонемент закінчився — тренер оформить новий', rec_nopkg: 'Абонемента поки немає — тренер його оформить',
+    rec_save: 'Закріпити розклад', rec_skip: 'Пропустити одне тренування можна будь-коли — решта залишаться', rec_active: 'Постійні записи', until: (d) => `до ${d}`, stop: 'Зупинити', stop_q: 'Зупинити постійний запис?', stop_sub: 'Майбутні тренування за цим розкладом скасуються.', rec_done: (n) => `Готово: ${n} ${pl(n, 'тренування', 'тренування', 'тренувань')} у розкладі`,
+    measure: 'Замір', for_period: 'за період', need_two: 'потрібно щонайменше 2 заміри', p_month: 'Міс', p_3m: '3 міс', p_all: 'Все', goal: 'Ціль', goal_sub: 'Тренер бачить ціль і допомагає до неї йти', records: 'Рекорди', visits_n: (n) => `${n} ${pl(n, 'тренування', 'тренування', 'тренувань')}`, records_empty: 'Тренер позначить тут твої рекорди',
+    chart_empty: 'Додай хоча б 2 заміри — з\'явиться графік', chart_label: 'Графік показника', new_measure: 'Новий замір',
+    f_all: 'Всі', f_trainer: 'Від тренера', f_wb: 'Самопочуття', f_measure: 'Заміри', f_complaint: 'Скарги', f_pkg: 'Абонемент', f_stale: 'Давно не були',
+    pinned: 'Закріплено тренером', notes_empty: 'Тут буде спільна стрічка: нотатки, заміри, самопочуття', q_measure: '+ Замір', private: 'Тільки мені', q_weight: '+ Вага', q_wb: '+ Самопочуття', q_hurts: '+ Болить',
+    new_note: 'Нова нотатка', note_ph: 'Нотатка для тренера…', note_ph_tr: 'Нотатка для клієнта…', wb_title: 'Самопочуття', sleep_h: (n) => `Сон ${n} год`, complaint: 'Скарга', new_record: 'Новий рекорд', cmp_handled_note: (z) => `Тренер врахував скаргу (${z})`,
+    wb_q: 'Як відчуття?', wb_hint: '1 — важко, 5 — чудово', sleep: 'Сон, год', wb_ph: 'Енергія, настрій, що турбує', wb_thanks: 'Дякуємо! Тренер побачить',
+    z_neck: 'Шия', z_shl: 'Плече Л', z_shr: 'Плече П', z_back: 'Спина', z_low: 'Поперек', z_elbow: 'Лікоть', z_wrist: 'Зап\'ястя', z_knl: 'Коліно Л', z_knr: 'Коліно П', z_ankle: 'Гомілкостоп', z_foot: 'Стопа', z_other: 'Інше',
+    w_rest: 'У спокої', w_load: 'Під навантаженням', w_after: 'Після тренування', cmp_title: 'Що турбує?', cmp_sub: 'Тренер побачить одразу й виправить план', where: 'Де', how_strong: (n) => `Наскільки сильно · ${n} з 10`, when_hurts: 'Коли болить',
+    cmp_ph: 'Наприклад: тягне під час глибокого присідання', send_trainer: 'Надіслати тренеру', cmp_doctor: 'Гострий біль, набряк чи оніміння — спершу до лікаря, тренування краще перенести.', cmp_sent: 'Надіслано тренеру',
+    your_trainer: 'Твій тренер', packages: 'Абонементи', paid: 'Оплачено', unpaid: 'Не оплачено', left_of: (a, b) => `залишилось ${a} з ${b}`, expired: 'закінчився', card_pay: 'Оплата на картку', i_paid: 'Я оплатив(ла)', claim_ok: 'Тренер отримає сповіщення', no_packages: 'Абонемента поки немає — тренер його оформить.',
+    language: 'Мова', history: 'Історія', st_attended: 'було', st_noshow: 'пропуск', st_late_cancel: 'пізнє скасування',
+    ob_client: 'Я клієнт', ob_client_sub: 'Відкрий посилання-запрошення від тренера — або введи код із нього.', code: 'Код', code_ph: 'Код запрошення', join: 'Приєднатися',
+    ob_trainer: 'Я тренер', ob_trainer_sub: 'Створи кабінет: розклад, клієнти, абонементи. Посилання для клієнтів отримаєш одразу.', access_code: 'Код доступу', access_code_ph: 'Код доступу (якщо видали)', become_trainer: 'Стати тренером',
+    settings: 'Налаштування', new_group: 'Нова група', v_day: 'День', v_week: 'Тиждень', day_sum: (a, b) => `${a} ${pl(a, 'тренування', 'тренування', 'тренувань')} · ${b} ${pl(b, 'вікно', 'вікна', 'вікон')}`,
+    day_is_off: 'Вихідний день.', make_working: 'Зробити робочим', no_hours: 'Цього дня немає робочих годин', set_hours: 'Налаштувати години', make_off: 'Зробити вихідним', free_book: 'Вільно — записати',
+    spots_of: (a, b) => `${a} з ${b}`, came: 'прийшов', noshow: 'Не прийшов', cmp_pill: (z) => `скарга: ${z}`, left_n: (n) => `залишилось ${n}`, no_pkg: 'без абонемента',
+    load: 'Завантаження тижня', load_of: (a, b, p) => `${a} з ${b} · ${p}%`, plan_none: 'План ще не складено', make_plan: 'Скласти', no_members: 'Поки ніхто не записався', cancel_session: 'Скасувати тренування',
+    card: 'Картка', change_plan: 'Змінити план', handled: 'Враховано', done: 'Проведено',
+    copy_last: 'Минулий', plan_title: 'Назва', plan_title_ph: 'Наприклад: Ноги та сідниці', ex_ph: 'Вправа', add_ex: 'Вправа', plan_note: 'Коментар', plan_note_ph: 'Розминка, темп, на що звернути увагу', save_notify: 'Зберегти',
+    free_window: 'Вільне вікно', book_client: 'Записати клієнта', no_clients: 'Поки немає клієнтів', group_here: 'Створити групу на цей час',
+    g_title: 'Назва', g_title_ph: 'Функціонал', g_cap: 'Місць', g_min: 'Хвилин', g_repeat: 'Повторювати', g_once: 'Один раз',
+    invite: 'Запросити', search: 'Пошук', search_ph: 'Ім\'я або @нік', complaint_s: 'скарга', paid_check: 'перевірити оплату', renew: 'продовжити', call_back: 'покликати',
+    last_visit: (d) => `був(ла) ${d}`, no_clients_title: 'Запроси перших клієнтів', no_clients_sub: 'Надішли посилання-запрошення — клієнт відкриє його й одразу потрапить до тебе.', send_invite: 'Надіслати запрошення',
+    attention: 'Потребують уваги', all_clients: 'Усі клієнти', nothing_found: 'Нікого не знайшли', client: 'Клієнт', since: (d) => `з ${d}`, book_s: 'Записати', note_s: 'Нотатки',
+    money_came: 'Гроші прийшли', mark_paid: 'Позначити оплату', new_pkg: 'Новий абонемент', no_pkg_title: 'Немає абонемента', no_pkg_sub: 'Створи — клієнту прийдуть реквізити для оплати', sessions_ahead: (n) => `${n} попереду`,
+    pinned_for: 'Закріп для клієнта', pinned_ph: 'Наприклад: коліно праворуч — без випадів', only_you: 'Бачите лише ви', private_ph: 'Особисті нотатки про клієнта', wb_trend: (n) => `Самопочуття · ${n}`, avg: (v) => `у середньому ${v} / 5`, no_data: 'немає даних',
+    goal_none: 'Ціль не задана', add_record: 'Рекорд', notes_feed: 'Стрічка', pinned_hint: 'Клієнт побачить це вгорі стрічки нотаток.', private_hint: 'Клієнт цього не побачить.',
+    sessions_count: 'Тренувань', valid: 'Термін', days_n: (n) => `${n} ${pl(n, 'день', 'дні', 'днів')}`, no_limit: 'Без терміну', price: 'Сума', already_paid: 'Вже оплачено', pkg_send_hint: 'Клієнту прийдуть номер картки й кнопка «Я оплатив».', pkg_sent: 'Клієнту надіслано реквізити',
+    pick_slot: 'Обери вільне вікно', no_free: 'На 2 тижні вільних вікон немає',
+    month_income: (m) => `Оплачено за ${m.toLowerCase()}`, month_sessions: (n) => `${n} ${pl(n, 'тренування проведено', 'тренування проведено', 'тренувань проведено')} цього місяця`, wait_confirm: 'Чекають підтвердження', not_paid: 'Не оплачені', no_pkg_list: 'Записані без абонемента', paid_recent: 'Оплачено', pay_empty: 'Тут будуть абонементи й оплати', paid_ok: 'Оплату підтверджено',
+    invite_link: 'Посилання для клієнтів', clients_n: (n) => `${n} ${pl(n, 'клієнт', 'клієнти', 'клієнтів')}`, s_title: 'Хто ви', s_title_ph: 'Персональний тренер', s_address: 'Адреса залу', s_address_ph: 'Вулиця, будинок, зал',
+    s_payment: 'Оплата', s_card: 'Номер картки', s_card_name: 'Отримувач', s_card_name_ph: 'Ім\'я П.', s_rules: 'Правила запису', s_slot: 'Тривалість тренування', s_notice: 'Запис не пізніше ніж за', s_cancel: 'Безкоштовне скасування за',
+    s_hours: 'Робочі години', add_range: 'проміжок', day_off_s: 'вихідний', days_off: 'Вихідні дні',
+    exercise: 'Вправа', result: 'Результат', rec_name_ph: 'Присідання', metric: 'Показник', target: 'Ціль', until_date: 'До дати', goal_text: 'Як звучить ціль', goal_ph: '−5 кг до весни',
+    archive: 'Прибрати з клієнтів', archive_q: 'Прибрати клієнта?', archive_sub: 'Він зникне зі списку. Якщо знову відкриє ваше посилання — повернеться.',
+    join_group_q: 'Записатися в групу?', cancel_q: 'Скасувати тренування?', cancel_tr_sub: 'Клієнт отримає сповіщення в Telegram.', cancel_session_q: 'Скасувати тренування?',
+    dayoff_q: 'Зробити день вихідним?', dayoff_sub: 'Нові записи на цей день стануть недоступні. Уже записаних скасуйте вручну.',
+    canceled: 'Тренування скасовано', canceled_late: 'Скасовано. Тренування списано — пізнє скасування', booked_ok: 'Записано ✓', moved_ok: 'Перенесено ✓', marked_done: 'Позначено ✓', plan_saved: 'План збережено — клієнт отримав сповіщення',
+    group_ok: 'Групу створено', group_skipped: (a, b) => `Створено ${a}, пропущено ${b} — час зайнятий`, no_prev_plan: 'Минулих планів немає', move_hint: 'Скасуй тренування й запиши клієнта на новий час у вільне вікно',
+    cmp_handle_title: 'Скаргу враховано', cmp_handle_sub: 'Клієнт отримає повідомлення. Можна коротко написати, що змінили.', cmp_handle_ph: 'Замінив випади на сідничний міст',
+    invite_text: 'Записуйся на тренування через цього бота 💪', no_username: 'У користувача немає @username — напишіть йому через Telegram',
+    open_in_tg: 'Відкрийте в Telegram', open_in_tg_sub: 'Цей застосунок працює всередині Telegram-бота.',
+    err_server: 'Щось пішло не так. Спробуйте ще раз', err_load: 'Не вдалося завантажити', err_auth: 'Відкрийте застосунок знову з бота',
+    err_slot_taken: 'Цей час уже зайняли — оберіть інший', err_slot_invalid: 'Цей час недоступний', err_too_soon: 'Запізно для запису на цей час', err_too_far: 'Так далеко записатися не можна', err_day_off: 'Тренер не працює цього дня',
+    err_too_late: 'До тренування залишилось замало часу', err_full: 'Місць більше немає', err_bad_input: 'Перевірте дані', err_not_found: 'Не знайдено', err_too_many: 'Забагато записів', err_forbidden: 'Немає доступу',
+    err_no_trainer: 'Спершу приєднайтеся до тренера', err_not_trainer: 'Лише для тренера', err_bad_code: 'Код запрошення неправильний', err_self: 'Це ваш власний код', err_bad_status: 'Статус уже змінено', err_bad_hours: 'Перевірте робочі години', err_trainer_code: 'Неправильний код доступу',
+  },
+};
+
+'use strict';
+// ───────── основа ─────────
+const CFG = window.COACH_CONFIG || {};
+const TG = window.Telegram && window.Telegram.WebApp;
+const safe = (fn, d) => { try { return fn(); } catch (e) { return d; } };
+const INIT = safe(() => TG.initData, '') || safe(() => sessionStorage.getItem('devinit'), '') || '';
+const S = { me: null, lang: 'ru', role: null, home: null, cache: {}, bk: { sel: null, format: 'gym', move: null }, rec: null,
+  td: { day: null, view: 'day' }, prog: { metric: 'weight', period: 90 }, nf: '', collapsed: null, cmp: { zone: '', level: 3, when: '' }, cf: 'all', q: '' };
+const app = () => document.getElementById('app');
+function t(k, ...a) { const d = I18N[S.lang] || I18N.ru; const v = d[k] != null ? d[k] : I18N.ru[k] != null ? I18N.ru[k] : k; return typeof v === 'function' ? v(...a) : v; }
+const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const hap = (k) => safe(() => (k === 'success' || k === 'error' || k === 'warning') ? TG.HapticFeedback.notificationOccurred(k) : TG.HapticFeedback.impactOccurred(k || 'light'));
+const num = (v, d = 1) => (v == null ? '—' : Number(v).toLocaleString(S.lang === 'uk' ? 'uk-UA' : 'ru-RU', { maximumFractionDigits: d }));
+
+async function call(a, extra = {}) {
+  const r = await fetch(CFG.api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ init: INIT, a, ...extra }) });
+  let j = null; try { j = await r.json(); } catch (e) {}
+  if (!r.ok) { const e = new Error((j && j.error) || 'server'); e.code = (j && j.error) || 'server'; throw e; }
+  return j;
+}
+function toast(msg, err) {
+  let el = document.getElementById('toast');
+  if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; document.body.appendChild(el); }
+  el.textContent = msg; el.classList.toggle('err', !!err); el.classList.add('show');
+  clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2600);
+}
+const fail = (e) => { hap('error'); toast(t('err_' + (e && e.code)) !== 'err_' + (e && e.code) ? t('err_' + e.code) : t('err_server'), true); };
+
+// ───────── иконки и аватары ─────────
+const IC = {
+  home: '<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  cal: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+  chart: '<path d="M4 19h16M6 16l4-5 3 3 5-7"/>',
+  note: '<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',
+  users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/>',
+  wallet: '<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/>',
+  more: '<circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', left: '<path d="m15 6-6 6 6 6"/>', right: '<path d="m9 6 6 6-6 6"/>',
+  down: '<path d="m6 9 6 6 6-6"/>', up: '<path d="m6 15 6-6 6 6"/>', check: '<path d="m5 12 5 5 9-10"/>', x: '<path d="M6 6l12 12M18 6 6 18"/>',
+  send: '<path d="M4 12 20 4l-6 16-3-7z"/>', pin: '<path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  video: '<rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/>',
+  repeat: '<path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 0 1 4-4h12"/><path d="M7 22l-3-3 3-3"/><path d="M20 13v2a4 4 0 0 1-4 4H4"/>',
+  alert: '<path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17v.5"/>', pulse: '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  link: '<path d="M10 14a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 10a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>', sliders: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+  dumbbell: '<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>', lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  flame: '<path d="M12 3c1 4 5 5.5 5 10a5 5 0 0 1-10 0c0-2.5 1.5-3.5 2-5.5 1 1.5 2 2 3 2-1-2.5-.5-4.5 0-6.5z"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+  trash: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>', share: '<path d="M12 3v12M7 8l5-5 5 5M5 14v6h14v-6"/>',
+};
+const ic = (n, s = 18, c = 'currentColor', w = 2) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[n] || ''}</svg>`;
+const AVC = ['#FFD7C2', '#C9D7FF', '#D8F0D2', '#F6D6F0', '#FFE9A8', '#CFEFF2', '#E2DAFF', '#FFD3D3', '#DDE3EA', '#F9E0C7'];
+const initials = (n) => (String(n || '?').trim().split(/\s+/).map((x) => x[0]).join('').slice(0, 2) || '?').toUpperCase();
+function av(u, s = 40) {
+  u = u || {};
+  const st = `width:${s}px;height:${s}px;font-size:${Math.max(10, Math.round(s / 3))}px;background-color:${AVC[Math.abs(Number(u.id) || 0) % AVC.length]}`;
+  if (u.photo && /^https:\/\//.test(u.photo)) return `<div class="av" role="img" aria-label="${esc(u.name)}" style="${st};background-image:url('${esc(u.photo)}')"></div>`;
+  return `<div class="av" role="img" aria-label="${esc(u.name)}" style="${st}">${esc(initials(u.name))}</div>`;
+}
+
+// ───────── даты ─────────
+const TZ = () => (S.me && S.me.trainer && S.me.trainer.tz) || 'Europe/Kyiv';
+const LOC = () => (S.lang === 'uk' ? 'uk-UA' : 'ru-RU');
+const dkey = (ms, tz) => new Intl.DateTimeFormat('en-CA', { timeZone: tz || TZ() }).format(new Date(Number(ms)));
+const today = () => dkey(Date.now());
+const addDays = (iso, n) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const dowOf = (iso) => ((new Date(iso + 'T00:00:00Z').getUTCDay() + 6) % 7) + 1;
+const monday = (iso) => addDays(iso, 1 - dowOf(iso));
+const fday = (iso, o) => new Intl.DateTimeFormat(LOC(), { timeZone: 'UTC', ...o }).format(new Date(iso + 'T00:00:00Z'));
+const hm = (ms, tz) => new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: tz || TZ() }).format(new Date(Number(ms)));
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const longDay = (iso) => cap(fday(iso, { weekday: 'long', day: 'numeric', month: 'long' }));
+const shortDay = (iso) => cap(fday(iso, { weekday: 'short', day: 'numeric', month: 'short' }));
+const whenStr = (ms, tz) => `${shortDay(dkey(ms, tz))}, ${hm(ms, tz)}`;
+const DOW = () => t('dows');
+function rel(ms) {
+  const diff = Number(ms) - Date.now(), h = diff / 3600000;
+  if (diff < 0) return t('rel_now');
+  const dd = Math.round((new Date(dkey(ms) + 'T00:00:00Z') - new Date(today() + 'T00:00:00Z')) / 86400000);
+  if (dd === 0) return h < 1 ? t('rel_min', Math.max(1, Math.round(diff / 60000))) : t('rel_hours', Math.round(h));
+  if (dd === 1) return t('rel_tomorrow');
+  return t('rel_days', dd);
+}
+const fmtName = (f) => t(f === 'online' ? 'f_online' : 'f_gym');
+
+// ───────── шторки ─────────
+function sheet(html, opts = {}) {
+  closeSheet(true);
+  const bg = document.createElement('div'); bg.className = 'sheet-bg'; bg.id = 'sheet-bg';
+  const sh = document.createElement('div'); sh.className = 'sheet'; sh.id = 'sheet'; sh.setAttribute('role', 'dialog'); sh.setAttribute('aria-modal', 'true');
+  sh.innerHTML = '<div class="grab"></div>' + html;
+  document.body.append(bg, sh);
+  bg.onclick = () => (opts.onBg ? opts.onBg() : closeSheet());
+  requestAnimationFrame(() => { bg.classList.add('show'); sh.classList.add('show'); });
+  S.sheetOpen = true;
+  return sh;
+}
+function closeSheet(now) {
+  const bg = document.getElementById('sheet-bg'), sh = document.getElementById('sheet');
+  S.sheetOpen = false;
+  if (!sh) return;
+  if (now) { bg && bg.remove(); sh.remove(); return; }
+  bg.classList.remove('show'); sh.classList.remove('show');
+  setTimeout(() => { bg.remove(); sh.remove(); }, 220);
+}
+function confirmSheet(title, text, okLabel, onOk, danger) {
+  sheet(`<div class="h2">${esc(title)}</div>${text ? `<p class="muted s14" style="line-height:1.45">${text}</p>` : ''}
+    <div class="grid2 mt12"><button class="btn soft" data-a="close">${t('back')}</button><button class="btn ${danger ? 'bad' : ''}" data-a="ok">${esc(okLabel)}</button></div>`);
+  ACT_ONCE.ok = onOk;
+}
+
+// ───────── навигация ─────────
+const CNAV = [['home', 'home', 'n_today'], ['book', 'cal', 'n_book'], ['progress', 'chart', 'n_progress'], ['notes', 'note', 'n_notes']];
+const TNAV = [['day', 'cal', 'n_schedule'], ['clients', 'users', 'n_clients'], ['pay', 'wallet', 'n_pay'], ['more', 'more', 'n_more']];
+function route() {
+  let h = decodeURIComponent(location.hash.replace(/^#/, ''));
+  const m = h.match(/^(\w+)[=/](.+)$/);
+  return m ? { name: m[1], arg: m[2] } : { name: h || '', arg: null };
+}
+function go(h) { if (location.hash === '#' + h) render(); else location.hash = h; }
+function navHtml(active) {
+  const items = S.role === 'trainer' ? TNAV : CNAV;
+  const badge = S.role === 'trainer' && S.payBadge ? `<span class="badge">${S.payBadge}</span>` : '';
+  return `<nav class="nav" aria-label="menu">${items.map(([r, i, k]) => `<button class="${r === active ? 'on' : ''}" data-a="go" data-r="${r}" aria-current="${r === active ? 'page' : 'false'}">${ic(i, 20, 'currentColor', r === active ? 2.2 : 2)}${t(k)}${r === 'pay' ? badge : ''}</button>`).join('')}</nav>`;
+}
+const SUB = ['client', 'cnotes', 'complaint', 'rec', 'settings'];
+function setBack(on) { safe(() => { if (on) TG.BackButton.show(); else TG.BackButton.hide(); }); }
+
+async function render() {
+  const r = route();
+  if (!S.me) return;
+  if (S.role === 'new') { app().innerHTML = viewOnboard(); return; }
+  const def = S.role === 'trainer' ? 'day' : 'home';
+  const name = r.name || def;
+  const views = S.role === 'trainer'
+    ? { day: viewDay, week: viewDay, clients: viewClients, client: viewClient, cnotes: viewNotes, pay: viewPay, more: viewMore }
+    : { home: viewHome, book: viewBook, rec: viewRec, progress: viewProgress, notes: viewNotes, complaint: viewComplaint };
+  const fn = views[name] || views[def];
+  setBack(SUB.includes(name));
+  const navKey = { week: 'day', client: 'clients', cnotes: 'clients', rec: 'book', complaint: 'home' }[name] || name;
+  const seq = (S.seq = (S.seq || 0) + 1);
+  if (!app().dataset.v || app().dataset.v !== name) app().innerHTML = skeleton();
+  app().dataset.v = name;
+  try {
+    const html = await fn(r.arg);
+    if (seq !== S.seq) return;
+    app().innerHTML = html;
+    app().classList.toggle('no-nav', !!document.querySelector('#app .hide-nav'));
+    let nav = document.getElementById('nav-root');
+    if (!nav) { nav = document.createElement('div'); nav.id = 'nav-root'; document.body.appendChild(nav); }
+    nav.innerHTML = navHtml(navKey) + miniHtml();
+    if (S.afterRender) { const f = S.afterRender; S.afterRender = null; f(); }
+  } catch (e) {
+    if (seq !== S.seq) return;
+    app().innerHTML = `<div class="empty">${t('err_load')}<br><br><button class="btn sm" data-a="reload">${t('retry')}</button></div>`;
+    console.log(e);
+  }
+}
+const skeleton = () => '<div class="skel" style="height:44px;width:60%;margin-bottom:16px"></div><div class="skel" style="height:220px"></div><div class="skel" style="height:140px;margin-top:10px"></div>';
+
+// ───────── данные с кэшем ─────────
+async function load(key, fn, maxAge = 15000) {
+  const c = S.cache[key];
+  if (c && Date.now() - c.t < maxAge) return c.v;
+  const v = await fn();
+  S.cache[key] = { v, t: Date.now() };
+  return v;
+}
+const drop = (...prefixes) => { for (const k of Object.keys(S.cache)) if (prefixes.some((p) => k.startsWith(p))) delete S.cache[k]; };
+
+// ═════════ КЛИЕНТ ═════════
+function greet() { const h = Number(hm(Date.now()).slice(0, 2)); return t(h < 5 ? 'g_night' : h < 12 ? 'g_morning' : h < 18 ? 'g_day' : 'g_evening'); }
+
+async function viewHome() {
+  const H = (S.home = await load('home', () => call('home')));
+  const me = S.me, tr = H.trainer, nx = H.next;
+  let out = `<div class="top"><button class="row gap12" data-a="profile" aria-label="${t('profile')}">${av(me, 44)}<div class="col" style="text-align:left"><span class="s13 muted" style="font-weight:500">${greet()},</span><span style="font-size:21px;font-weight:800;letter-spacing:-.3px">${esc(me.first || me.name)}</span></div></button>
+    <button class="ibtn" data-a="profile" aria-label="${t('profile')}">${ic('wallet', 20)}</button></div>`;
+  if (nx) {
+    const end = Number(nx.ts) + nx.minutes * 60000;
+    out += `<div class="card dark" style="border-radius:26px;padding:18px">
+      <div class="row between"><span class="pill p-acc" style="font-size:12px;padding:6px 10px;border-radius:999px">${rel(nx.ts)}</span>
+      <span class="small muted sb">${nx.kind === 'group' ? esc(nx.title) : t('personal')} · ${nx.minutes} ${t('min')}</span></div>
+      <div class="col mt12"><span class="s14 muted sb">${longDay(dkey(nx.ts, nx.tz))}</span><span style="font-size:38px;font-weight:800;letter-spacing:-1px;line-height:1.1">${hm(nx.ts, nx.tz)} – ${hm(end, nx.tz)}</span></div>
+      <div class="row mt12">${av(tr, 32)}<div class="col grow"><span class="s14 b">${esc(tr.name)}</span><span class="small muted row gap4">${ic(nx.format === 'online' ? 'video' : 'pin', 13, '#A3A8B3')}${fmtName(nx.format)}${nx.format !== 'online' && tr.address ? ' · ' + esc(tr.address) : ''}</span></div>
+      ${tr.username ? `<button class="ibtn" style="background:rgba(255,255,255,.1);width:40px;height:40px" data-a="tgchat" data-u="${esc(tr.username)}" aria-label="${t('write_trainer')}">${ic('send', 18, '#fff')}</button>` : ''}</div>
+      ${!nx.confirmed && Number(nx.ts) - Date.now() < 48 * 3600000 ? `<button class="btn acc mt12" style="height:46px;border-radius:14px" data-a="confirm" data-id="${nx.id}">${ic('check', 18)}${t('will_come')}</button>` : nx.confirmed ? `<div class="small mt8 row gap4" style="color:var(--acc)">${ic('check', 14, 'currentColor', 3)}${t('confirmed')}</div>` : ''}
+      <div class="grid2 mt12">${nx.kind === 'personal' ? `<button class="btn soft" style="height:46px;border-radius:14px;font-size:14px" data-a="move" data-id="${nx.id}">${t('move')}</button>` : '<span></span>'}
+      <button class="btn line" style="height:46px;border-radius:14px;font-size:14px;font-weight:600" data-a="cancelbk" data-id="${nx.id}">${t('cancel')}</button></div></div>`;
+    out += planCard(nx, H);
+  } else {
+    out += `<div class="card dark" style="border-radius:26px;padding:20px"><div class="h2">${t('no_next')}</div><p class="muted s14" style="margin:6px 0 14px;line-height:1.45">${t('no_next_sub')}</p>
+      <button class="btn acc" data-a="go" data-r="book">${ic('cal', 18)}${t('book_now')}</button></div>`;
+  }
+  // абонемент — только когда нужно внимание
+  const unpaid = (H.packages || []).find((p) => !p.paid && !p.expired);
+  if (unpaid) out += `<div class="card mt10 row gap12"><div class="col grow"><span class="s13 muted sb">${t('pkg_n', unpaid.total)}${unpaid.price ? ' · ' + num(unpaid.price, 0) + ' ₴' : ''}</span><span class="s14 b">${unpaid.claimed ? t('pkg_wait_confirm') : t('pkg_need_pay')}</span></div>${unpaid.claimed ? `<span class="pill p-warn">${t('pending')}</span>` : `<button class="btn sm" data-a="profile">${t('pay')}</button>`}</div>`;
+  else if (H.left != null && H.left <= 1) out += `<div class="card mt10 row gap12"><span class="ibtn" style="background:var(--warn-bg)">${ic('alert', 18, 'var(--warn)')}</span><div class="col grow"><span class="s14 b">${H.left <= 0 ? t('pkg_empty') : t('pkg_last')}</span><span class="small muted">${t('pkg_ask')}</span></div></div>`;
+  // вес и серия
+  const w = H.weight || [];
+  const last = w.length ? Number(w[w.length - 1][1]) : null, first = w.length > 1 ? Number(w[0][1]) : null;
+  out += `<div class="grid2 mt10"><button class="card col gap4" style="text-align:left;padding:14px" data-a="go" data-r="progress">
+      <span class="s13 muted sb">${t('m_weight')}</span><span style="font-size:24px;font-weight:800">${last == null ? '—' : num(last)} <span class="s14 muted sb">${t('kg')}</span></span>
+      ${spark(w.map((x) => Number(x[1])), 140, 34)}
+      <span class="small b" style="color:${first != null && last < first ? 'var(--ok)' : 'var(--muted)'}">${first == null ? t('add_weight') : (last - first > 0 ? '+' : last - first < 0 ? '−' : '') + num(Math.abs(last - first)) + ' ' + t('kg')}</span></button>
+    <div class="card col gap4" style="padding:14px"><span class="s13 muted sb">${t('streak')}</span><span style="font-size:24px;font-weight:800">${H.streak} <span class="s14 muted sb">${t('weeks', H.streak)}</span></span>
+      <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:4px;margin-top:8px">${Array.from({ length: 8 }, (_, i) => `<span style="height:22px;border-radius:6px;background:${i >= 8 - Math.min(8, H.streak) ? (i === 7 ? 'var(--ink)' : 'var(--acc)') : 'var(--line)'}"></span>`).join('')}</div>
+      <span class="small muted sb">${H.streak ? t('no_skips') : t('streak_start')}</span></div></div>`;
+  const rest = (H.upcoming || []).filter((b) => !nx || b.id !== nx.id).slice(0, 6);
+  if (rest.length) {
+    out += `<span class="lbl">${t('next_ones')}</span>` + rest.map((b) => `<button class="lrow" data-a="bk" data-id="${b.id}"><div class="col" style="width:48px;height:48px;border-radius:14px;background:var(--bg);align-items:center;justify-content:center"><span style="font-size:10px;font-weight:700" class="muted">${esc(fday(dkey(b.ts, b.tz), { weekday: 'short' }).toUpperCase())}</span><span style="font-size:17px;font-weight:800;line-height:1">${Number(dkey(b.ts, b.tz).slice(8))}</span></div>
+      <div class="col grow"><span class="s14 b">${hm(b.ts, b.tz)} · ${b.kind === 'group' ? esc(b.title) : t('personal')}</span><span class="small muted sb">${fmtName(b.format)}${b.series ? ' · ↻' : ''}${b.plan ? ' · ' + t('has_plan') : ''}</span></div>${ic('right', 16, 'var(--soft)')}</button>`).join('');
+  }
+  return out;
+}
+
+function planCard(b, H) {
+  const p = b.plan;
+  const cmp = (H.complaints || [])[0];
+  const al = cmp ? (cmp.status === 'handled' ? `<div class="alert a-warn">${ic('alert', 14, 'currentColor', 2.2)}${t('cmp_handled', esc(cmp.zone))}</div>` : `<div class="alert a-bad">${ic('pulse', 14, 'currentColor', 2.2)}${t('cmp_open', esc(cmp.zone))}</div>`) : '';
+  const items = p && p.items ? p.items : [];
+  const show = S.planAll ? items : items.slice(0, 4);
+  return `<div class="card mt10 col gap8"><div class="row between" style="align-items:flex-start"><div class="col"><span class="small muted b">${t('plan_for', fday(dkey(b.ts, b.tz), { weekday: 'long' }))}</span>
+      <span class="h2 row gap6">${ic('dumbbell', 18, 'currentColor', 2.2)}${p && p.title ? esc(p.title) : t('plan_soon')}</span></div>
+      ${items.length ? `<span class="pill p-rep" style="font-size:12px;border-radius:999px;padding:6px 10px">${t('ex_n', items.length)}</span>` : ''}</div>
+    ${al}
+    ${show.map((x, i) => `<div class="ex"><span class="no">${i + 1}</span><span class="s14 b grow">${esc(x.n)}${x.x ? ` <span class="pill p-warn" style="font-size:10px">${t('replaced')}</span>` : ''}</span><span class="s13 muted b nowrap">${esc(x.s)}</span></div>`).join('')}
+    ${p && p.note ? `<div class="small muted" style="line-height:1.4">${esc(p.note)}</div>` : ''}
+    ${!items.length ? `<span class="s13 muted" style="line-height:1.4">${t('plan_soon_sub')}</span>` : ''}
+    <div class="grid2">${items.length > 4 ? `<button class="btn soft" style="height:44px;border-radius:14px;font-size:13px" data-a="planall">${S.planAll ? t('collapse') : t('all_plan')}</button>` : `<button class="btn soft" style="height:44px;border-radius:14px;font-size:13px" data-a="wellbeing">${t('wb_short')}</button>`}
+      <button class="btn warn" style="height:44px;border-radius:14px;font-size:13px" data-a="go" data-r="complaint">${ic('pulse', 16, 'currentColor', 2.2)}${t('hurts')}</button></div></div>`;
+}
+
+function spark(vals, w, h, color = 'var(--ink)') {
+  if (vals.length < 2) return `<svg width="100%" height="${h}" aria-hidden="true"></svg>`;
+  const mn = Math.min(...vals), mx = Math.max(...vals), sp = mx - mn || 1;
+  const pts = vals.map((v, i) => `${(i / (vals.length - 1)) * w},${4 + (1 - (v - mn) / sp) * (h - 8)}`).join(' ');
+  return `<svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`;
+}
+
+function bookingSheet(b) {
+  const tr = S.home && S.home.trainer;
+  const late = Number(b.ts) - Date.now() < ((tr && tr.cancelHours) || 12) * 3600000;
+  sheet(`<div class="row between"><span class="s13 muted b">${b.kind === 'group' ? esc(b.title) : t('personal')} · ${fmtName(b.format)}</span>${b.series ? `<span class="pill p-rep">↻ ${t('regular')}</span>` : ''}</div>
+    <div class="h2 mt8">${longDay(dkey(b.ts, b.tz))}</div><div style="font-size:30px;font-weight:800">${hm(b.ts, b.tz)} – ${hm(Number(b.ts) + b.minutes * 60000, b.tz)}</div>
+    ${b.plan && b.plan.items && b.plan.items.length ? `<div class="card mt12" style="background:var(--bg)"><span class="small muted b">${t('plan')}: ${esc(b.plan.title || '')}</span>${b.plan.items.map((x, i) => `<div class="ex"><span class="no" style="background:#fff">${i + 1}</span><span class="s14 b grow">${esc(x.n)}</span><span class="s13 muted b">${esc(x.s)}</span></div>`).join('')}</div>` : ''}
+    ${late ? `<div class="alert a-warn mt12">${ic('alert', 14)}${t('late_warn', (tr && tr.cancelHours) || 12)}</div>` : ''}
+    <div class="grid2 mt12">${b.kind === 'personal' && !late ? `<button class="btn soft" data-a="move" data-id="${b.id}">${t('move')}</button>` : `<button class="btn soft" data-a="close">${t('back')}</button>`}
+    <button class="btn bad" data-a="docancel" data-id="${b.id}">${t('cancel')}</button></div>`);
+}
+function findBooking(id) {
+  const H = S.home || {};
+  return [...(H.upcoming || []), H.next].filter(Boolean).find((b) => String(b.id) === String(id));
+}
+
+// ── запись (разовая)
+async function viewBook(arg) {
+  const tr = S.me.trainer;
+  if (arg && /^\d{4}-\d{2}-\d{2}$/.test(arg)) S.bk.day = arg;
+  const td = today();
+  if (!S.bk.day || S.bk.day < td) S.bk.day = td;
+  if (!S.bk.ws || S.bk.day < S.bk.ws || S.bk.day >= addDays(S.bk.ws, 7)) S.bk.ws = S.bk.day === td ? td : monday(S.bk.day) < td ? td : monday(S.bk.day);
+  const ws = S.bk.ws;
+  const days = await load('slots:' + ws, () => call('slots', { from: ws, days: 7 }));
+  const day = days.find((d) => d.date === S.bk.day) || days[0];
+  const mv = S.bk.move ? findBooking(S.bk.move) : null;
+  let out = `<div class="top"><span class="h1">${t('n_book')}</span><div class="row gap8" style="background:#fff;border-radius:999px;padding:4px 12px 4px 4px">${av(tr, 30)}<span class="s13 b">${esc(tr.first || tr.name)}</span></div></div>
+    <div class="seg"><button class="on">${t('one_time')}</button><button data-a="go" data-r="rec">${t('regular')}</button></div>`;
+  if (mv) out += `<div class="alert a-warn mb12" style="padding:10px 12px">${ic('repeat', 16)}<span class="grow">${t('moving', whenStr(mv.ts, mv.tz))}</span><button data-a="movecancel" aria-label="${t('cancel')}">${ic('x', 16)}</button></div>`;
+  out += `<div class="row between mb8"><span class="s14 b">${cap(fday(ws, { day: 'numeric', month: 'long' }))} – ${fday(addDays(ws, 6), { day: 'numeric', month: 'long' })}</span><div class="row gap6">
+    <button class="ibtn" style="width:36px;height:36px;border-radius:10px" data-a="bkweek" data-d="-7" ${ws <= td ? 'disabled style="width:36px;height:36px;border-radius:10px;opacity:.35"' : ''} aria-label="${t('prev_week')}">${ic('left', 16, 'currentColor', 2.2)}</button>
+    <button class="ibtn" style="width:36px;height:36px;border-radius:10px" data-a="bkweek" data-d="7" aria-label="${t('next_week')}">${ic('right', 16, 'currentColor', 2.2)}</button></div></div>`;
+  out += `<div class="week">${days.map((d) => {
+    const past = d.date < td;
+    const cls = d.date === day.date ? 'on' : past || d.off || !d.slots.length ? 'dim' : '';
+    return `<button class="wd ${cls} ${d.date === td ? 'today' : ''}" data-a="bkday" data-d="${d.date}" aria-label="${longDay(d.date)}"><span class="d">${DOW()[d.dow - 1]}</span><span class="n">${Number(d.date.slice(8))}</span><span class="c">${d.free || '—'}</span></button>`;
+  }).join('')}</div>`;
+  out += `<div class="row between mb12"><span class="s14 b">${longDay(day.date)}</span><div class="row gap6">
+    <button class="chip ${S.bk.format === 'gym' ? 'on' : 'out'}" style="height:34px" data-a="bkfmt" data-f="gym">${ic('pin', 14)}${t('gym_s')}</button>
+    <button class="chip ${S.bk.format === 'online' ? 'on' : 'out'}" style="height:34px" data-a="bkfmt" data-f="online">${ic('video', 14)}${t('online_s')}</button></div></div>`;
+  if (day.off || !day.slots.length) out += `<div class="empty">${t('day_off')}</div>`;
+  else {
+    let prevEnd = null;
+    for (const s of day.slots) {
+      const ts = Number(s.ts);
+      if (prevEnd != null && ts > prevEnd + 60000) out += `<div class="brk">${hm(prevEnd)} – ${s.t} · ${t('break')}</div>`;
+      prevEnd = ts + (s.minutes || tr.slot) * 60000;
+      out += `<div class="hrow"><span class="tm" style="${s.st === 'busy' || s.st === 'past' ? 'color:var(--soft)' : ''}">${s.t}</span>${slotBtn(s)}</div>`;
+    }
+    const anyFree = day.slots.some((s) => s.st === 'free' || s.st === 'group');
+    out += `<button class="btn ${day.waiting ? 'acc' : 'line'} mt8" style="height:46px;font-size:13px" data-a="wait" data-d="${day.date}" data-on="${day.waiting ? 0 : 1}">${day.waiting ? ic('check', 16) + t('waiting_on') : anyFree ? t('waitlist') : t('waitlist_full')}</button>`;
+  }
+  if (S.bk.sel) {
+    const sel = day.slots.find((s) => String(s.ts) === String(S.bk.sel));
+    if (sel) {
+      const left = S.home && S.home.left;
+      out += `<div class="bar-bottom hide-nav"><div class="row between"><div class="col"><span style="font-size:17px;font-weight:800">${shortDay(day.date)} · ${sel.t}</span>
+        <span class="s13 muted sb">${tr.slot} ${t('min')} · ${fmtName(S.bk.format)}${left != null && !mv ? ' · ' + t('will_charge', left) : ''}</span></div>
+        <button class="ibtn" style="background:var(--bg);width:40px;height:40px" data-a="bksel" data-ts="" aria-label="${t('cancel')}">${ic('x', 16)}</button></div>
+        <button class="btn mt12" style="height:56px;border-radius:18px;font-size:16px" data-a="dobook">${mv ? t('move_here') : t('book_btn')}<span style="width:26px;height:26px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center">${ic('right', 14, 'var(--ink)', 2.6)}</span></button>
+        <div class="small muted center mt8" style="font-weight:500">${t('cancel_rule', tr.cancelHours)}</div></div>`;
+    }
+  }
+  return out;
+}
+function slotBtn(s) {
+  const fm = s.fmt ? fmtName(s.fmt) : '';
+  if (s.st === 'mine') return `<button class="slot mine" data-a="bk" data-id="${s.bid}">${s.kind === 'group' ? esc(s.title) : t('your_session')} · ${fm}<span class="plus" style="background:var(--ink);border-radius:50%">${ic('check', 16, 'var(--acc)', 3)}</span></button>`;
+  if (s.st === 'busy') return `<div class="slot busy">${t('busy')}</div>`;
+  if (s.st === 'past') return `<div class="slot past">${t('unavailable')}</div>`;
+  if (s.st === 'group') return `<button class="slot grp" data-a="grp" data-sid="${s.sid}" data-ts="${s.ts}"><span class="col"><span class="s14 b">${t('group')} · ${esc(s.title)}</span><span class="small b" style="color:var(--acc-ink)">${s.spots > 0 ? t('spots_left', s.spots, s.cap) : t('full')}</span></span><span class="plus">${ic('plus', 16, 'currentColor', 2.4)}</span></button>`;
+  const on = String(S.bk.sel) === String(s.ts);
+  return `<button class="slot ${on ? 'sel' : ''}" data-a="bksel" data-ts="${on ? '' : s.ts}">${on ? `${s.t} – ${hm(Number(s.ts) + S.me.trainer.slot * 60000)} · ${t('chosen')}` : t('free')}<span class="plus">${ic(on ? 'check' : 'plus', 16, 'var(--ink)', on ? 3 : 2.4)}</span></button>`;
+}
+
+// ── постоянная запись
+async function viewRec() {
+  const tr = S.me.trainer;
+  const td = today();
+  const days = await load('slots2w:' + td, () => call('slots', { from: td, days: 14 }));
+  const H = S.home || (S.home = await load('home', () => call('home')));
+  const opts = {};
+  for (const d of days) for (const s of d.slots) if (s.kind !== 'group') (opts[d.dow] = opts[d.dow] || new Set()).add(s.t);
+  if (!S.rec) S.rec = { days: [], times: {}, weeks: 8, format: 'gym', take: true, preview: null };
+  const R = S.rec;
+  let out = `<div class="top"><span class="h1">${t('n_book')}</span></div>
+    <div class="seg"><button data-a="go" data-r="book">${t('one_time')}</button><button class="on">${t('regular')}</button></div>
+    <p class="muted s14 sb" style="line-height:1.45;margin:0 0 4px">${t('rec_intro')}</p>
+    <span class="lbl">${t('rec_days')}</span>
+    <div class="week" style="margin-bottom:6px">${[1, 2, 3, 4, 5, 6, 7].map((d) => `<button class="wd ${R.days.includes(d) ? 'on' : opts[d] ? '' : 'dim'}" style="height:48px;border-radius:14px" data-a="recday" data-d="${d}" ${opts[d] ? '' : 'disabled'}><span class="n" style="font-size:14px">${DOW()[d - 1]}</span></button>`).join('')}</div>`;
+  if (R.days.length) {
+    out += `<span class="lbl">${t('rec_times')}</span>` + R.days.map((d) => {
+      const list = [...(opts[d] || [])].sort();
+      if (!R.times[d] || !list.includes(R.times[d])) R.times[d] = list.includes('18:00') ? '18:00' : list[Math.floor(list.length / 2)] || '';
+      const conf = R.preview ? R.preview.conflicts.filter((c) => dowOf(c.date) === d) : [];
+      return `<div class="card row gap12 mb8" style="padding:10px 10px 10px 12px"><span class="ibtn" style="background:var(--bg);width:40px;height:40px;border-radius:12px;font-weight:800;font-size:14px">${DOW()[d - 1]}</span>
+        <span class="grow small b" style="color:${conf.length ? 'var(--warn)' : 'var(--ok)'}">${conf.length ? t('rec_conf', conf.length, fday(conf[0].date, { day: 'numeric', month: 'short' }), conf[0].suggest) : R.preview ? t('rec_ok') : ''}</span>
+        <label class="row" style="background:var(--bg);border-radius:12px;height:40px;padding:0 10px"><span class="hidden">${t('time')}</span><select data-in="rectime" data-d="${d}" style="border:none;background:transparent;font-weight:800;font-size:15px;outline:none">${list.map((x) => `<option ${x === R.times[d] ? 'selected' : ''}>${x}</option>`).join('')}</select></label></div>`;
+    }).join('');
+  }
+  out += `<span class="lbl">${t('rec_how_long')}</span><div class="chips mb12">${[[4, t('weeks_n', 4)], [8, t('weeks_n', 8)], [null, t('until_stop')]].map(([w, l]) => `<button class="chip ${R.weeks === w ? 'on' : ''}" data-a="recweeks" data-w="${w == null ? '' : w}">${l}</button>`).join('')}</div>
+    <div class="row between mb12"><span class="s13 b muted">${t('format')}</span><div class="row gap6"><button class="chip ${R.format === 'gym' ? 'on' : 'out'}" data-a="recfmt" data-f="gym">${t('gym_s')}</button><button class="chip ${R.format === 'online' ? 'on' : 'out'}" data-a="recfmt" data-f="online">${t('online_s')}</button></div></div>`;
+  const P = R.preview;
+  if (R.days.length && P) {
+    const dates = P.dates || [];
+    out += `<div class="card dark col gap8"><div class="row between" style="align-items:baseline"><span style="font-size:22px;font-weight:800">${t('sessions_n', P.count)}</span>
+      <span class="s13 muted sb">${dates.length ? fday(dates[0].date, { day: 'numeric', month: 'short' }) + ' – ' + (P.until ? fday(P.until, { day: 'numeric', month: 'short' }) : '∞') : ''}</span></div>
+      <div class="row gap6" style="flex-wrap:wrap">${dates.slice(0, 6).map((d) => `<span class="pill p-rep" style="font-size:12px;padding:5px 8px">${DOW()[dowOf(d.date) - 1]} ${Number(d.date.slice(8))}</span>`).join('')}${dates.length > 6 ? `<span class="pill" style="color:var(--acc)">+${dates.length - 6}</span>` : ''}</div>
+      ${P.conflicts.length ? `<button class="row gap8 small b" style="color:#fff;text-align:left" data-a="rectake"><span class="tog ${R.take ? 'on' : ''}" style="${R.take ? 'background:var(--acc)' : 'background:rgba(255,255,255,.2)'}"></span>${t('rec_take')}</button>` : ''}
+      <span class="small muted sb">${P.left != null ? t('rec_left', P.left) : t('rec_nopkg')}</span></div>
+      <button class="btn acc mt12" style="height:56px;border-radius:18px;font-size:16px" data-a="recsave" ${P.count ? '' : 'disabled'}>${ic('repeat', 18, 'currentColor', 2.4)}${t('rec_save')}</button>
+      <div class="small muted center mt8" style="font-weight:500">${t('rec_skip')}</div>`;
+  } else if (R.days.length) out += `<div class="skel" style="height:120px"></div>`;
+  if ((H.series || []).length) {
+    out += `<span class="lbl">${t('rec_active')}</span>` + H.series.map((s) => `<div class="lrow"><span class="ibtn" style="background:var(--bg);width:40px;height:40px;font-weight:800;font-size:14px">${DOW()[s.dow - 1]}</span><div class="col grow"><span class="s14 b">${s.t} · ${fmtName(s.format)}</span><span class="small muted sb">${s.until ? t('until', fday(s.until, { day: 'numeric', month: 'long' })) : t('until_stop')}</span></div><button class="btn sm soft" data-a="recstop" data-id="${s.id}">${t('stop')}</button></div>`).join('');
+  }
+  return out;
+}
+let recTimer = null;
+function recPreview() {
+  const R = S.rec; R.preview = null;
+  clearTimeout(recTimer);
+  if (!R.days.length) return render();
+  render();
+  recTimer = setTimeout(async () => {
+    try { R.preview = await call('series', recBody(true)); } catch (e) { fail(e); }
+    render();
+  }, 250);
+}
+const recBody = (dry) => ({ items: S.rec.days.map((d) => ({ dow: d, t: S.rec.times[d] })).filter((x) => x.t), weeks: S.rec.weeks, format: S.rec.format, dry, take: S.rec.take });
+
+// ── прогресс
+const METRICS = ['weight', 'waist', 'hips', 'chest', 'fat'];
+async function viewProgress() {
+  const P = await load('progress', () => call('progress'));
+  const m = S.prog.metric, unit = m === 'fat' ? '%' : m === 'weight' ? t('kg') : t('cm');
+  const all = (P.metrics[m] || []).map(([d, v]) => [d, Number(v)]);
+  const from = S.prog.period ? addDays(today(), -S.prog.period) : '0000';
+  const pts = all.filter(([d]) => d >= from);
+  const last = pts.length ? pts[pts.length - 1][1] : null, first = pts.length ? pts[0][1] : null;
+  let out = `<div class="top"><span class="h1">${t('n_progress')}</span><button class="btn sm" style="height:44px;border-radius:14px" data-a="measure" data-m="${m}">${ic('plus', 18, '#fff', 2.4)}${t('measure')}</button></div>
+    <div class="chips mb12">${METRICS.map((x) => `<button class="chip ${x === m ? 'on' : ''}" data-a="metric" data-m="${x}">${t('m_' + x)}</button>`).join('')}</div>
+    <div class="card col gap8"><div class="row between" style="align-items:flex-end"><div class="col"><span style="font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1.1">${last == null ? '—' : num(last)} <span class="muted" style="font-size:16px;font-weight:600">${unit}</span></span>
+      <span class="s13 b" style="color:${last != null && first != null && last < first ? 'var(--ok)' : 'var(--muted)'}">${pts.length > 1 ? (last - first > 0 ? '+' : last - first < 0 ? '−' : '') + num(Math.abs(last - first)) + ' ' + unit + ' ' + t('for_period') : t('need_two')}</span></div>
+      <div class="seg" style="margin:0;padding:3px;border-radius:10px;background:var(--bg)">${[[30, t('p_month')], [90, t('p_3m')], [0, t('p_all')]].map(([p, l]) => `<button class="${S.prog.period === p ? 'on' : ''}" style="height:30px;padding:0 8px;font-size:12px" data-a="period" data-p="${p}">${l}</button>`).join('')}</div></div>
+      ${chart(pts)}</div>`;
+  const g = P.goal;
+  if (g && (g.text || g.value)) {
+    let pct = null;
+    if (g.metric && g.value != null && all.length) {
+      const start = all[0][1], cur = all[all.length - 1][1], target = Number(g.value);
+      pct = start === target ? 100 : Math.max(0, Math.min(100, Math.round(((start - cur) / (start - target)) * 100)));
+    }
+    out += `<div class="card dark mt10 col gap8"><div class="row between"><span class="s14 b">${t('goal')}: ${esc(g.text || (g.value + ' ' + unit))}${g.date ? ' · ' + fday(g.date, { day: 'numeric', month: 'long' }) : ''}</span>${pct != null ? `<span class="s13 b" style="color:var(--acc)">${pct}%</span>` : ''}</div>
+      ${pct != null ? `<div class="prog"><i style="width:${pct}%"></i></div>` : ''}<span class="small muted sb">${t('goal_sub')}</span></div>`;
+  }
+  out += `<div class="card mt10"><div class="row between"><span class="s14 b">${t('records')}</span><span class="small muted b">${t('visits_n', P.visits)}</span></div>
+    ${(P.records || []).length ? P.records.slice(0, 8).map((r) => `<div class="row between" style="padding:9px 0;border-bottom:1px solid var(--line)"><span class="s13 muted sb">${esc(r.name)}</span><span class="s14 b">${esc(r.value)}</span></div>`).join('') : `<div class="small muted mt8">${t('records_empty')}</div>`}</div>`;
+  return out;
+}
+function chart(pts) {
+  const W = 326, H = 150;
+  if (pts.length < 2) return `<div class="empty" style="padding:30px 0">${t('chart_empty')}</div>`;
+  const vals = pts.map((p) => p[1]); let mn = Math.min(...vals), mx = Math.max(...vals); if (mx - mn < 1) { mn -= 0.5; mx += 0.5; }
+  const x = (i) => 8 + (i / (pts.length - 1)) * (W - 16), y = (v) => 14 + (1 - (v - mn) / (mx - mn)) * (H - 40);
+  const line = pts.map((p, i) => `${x(i).toFixed(1)},${y(p[1]).toFixed(1)}`).join(' ');
+  const lab = [0, Math.floor((pts.length - 1) / 2), pts.length - 1].filter((v, i, a) => a.indexOf(v) === i);
+  return `<svg width="100%" viewBox="0 0 ${W} ${H}" role="img" aria-label="${t('chart_label')}">
+    ${[14, (H - 26 + 14) / 2, H - 26].map((yy) => `<line x1="0" x2="${W}" y1="${yy}" y2="${yy}" stroke="#EEF0F2"/>`).join('')}
+    <polygon points="${x(0)},${H - 22} ${line} ${x(pts.length - 1)},${H - 22}" fill="var(--acc)" opacity=".35"/>
+    <polyline points="${line}" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${x(pts.length - 1)}" cy="${y(vals[vals.length - 1])}" r="7" fill="var(--acc)" stroke="var(--ink)" stroke-width="3"/>
+    ${lab.map((i) => `<text x="${Math.min(W - 40, Math.max(0, x(i) - 14))}" y="${H - 4}" font-size="10" font-weight="600" fill="#5D636E">${esc(fday(pts[i][0], { day: 'numeric', month: 'short' }))}</text>`).join('')}</svg>`;
+}
+function measureSheet(metric, client) {
+  S.ms = { metric: metric || 'weight', client };
+  const draw = () => `<div class="h2">${t('new_measure')}</div><div class="chips mt12 mb12">${METRICS.map((x) => `<button class="chip ${x === S.ms.metric ? 'on' : 'out'}" data-a="msm" data-m="${x}">${t('m_' + x)}</button>`).join('')}</div>
+    <label class="field"><span>${t('value')} (${S.ms.metric === 'fat' ? '%' : S.ms.metric === 'weight' ? t('kg') : t('cm')})</span><input id="ms-v" class="inp" inputmode="decimal" placeholder="64,2" autocomplete="off"></label>
+    <label class="field"><span>${t('date')}</span><input id="ms-d" class="inp" type="date" value="${today()}" max="${today()}"></label>
+    <button class="btn" data-a="mssave">${t('save')}</button>`;
+  sheet(draw()); S.msDraw = draw;
+  setTimeout(() => safe(() => document.getElementById('ms-v').focus()), 260);
+}
+
+// ── заметки (клиент и тренер)
+const NF = [['', 'f_all'], ['trainer', 'f_trainer'], ['wellbeing', 'f_wb'], ['measure', 'f_measure'], ['complaint', 'f_complaint']];
+async function viewNotes(arg) {
+  const client = arg ? Number(arg) : null;
+  const isTr = S.role === 'trainer';
+  const N = await load('notes:' + (client || '') + ':' + S.nf, () => call('notes', { client, kind: S.nf }), 8000);
+  const card = client ? S.cache['card:' + client] && S.cache['card:' + client].v : null;
+  let out = `<div class="top">${client ? `<button class="ibtn" data-a="go" data-r="client/${client}" aria-label="${t('back')}">${ic('left', 18, 'currentColor', 2.4)}</button>` : ''}<span class="h1 grow">${client && card ? esc(card.first || card.name) : t('n_notes')}</span></div>
+    <div class="chips mb12">${NF.map(([k, l]) => `<button class="chip ${S.nf === k ? 'on' : ''}" data-a="nf" data-k="${k}">${t(l)}</button>`).join('')}</div>`;
+  if (N.pinned) out += `<div class="card col gap8" style="background:var(--acc);padding:14px"><span class="small b row gap6" style="text-transform:uppercase;letter-spacing:.5px">${ic('pin', 14, 'currentColor', 2.2)}${t('pinned')}</span><span class="s14 b" style="white-space:pre-line;line-height:1.45">${esc(N.pinned)}</span></div>`;
+  const items = N.items || [];
+  if (!items.length) out += `<div class="empty">${t('notes_empty')}</div>`;
+  let lastDay = '';
+  for (const n of items) {
+    const d = dkey(n.created);
+    if (d !== lastDay) { lastDay = d; out += `<div class="feedday">${d === today() ? t('today') : d === addDays(today(), -1) ? t('yesterday') : cap(fday(d, { day: 'numeric', month: 'long' }))}</div>`; }
+    out += noteHtml(n, isTr);
+  }
+  if (items.length >= 40) out += `<button class="btn soft mt8" data-a="notesmore" data-before="${items[items.length - 1].id}">${t('more')}</button>`;
+  out += `<div style="height:130px"></div><div class="bar-bottom col gap8" style="bottom:calc(var(--nav) + 22px + var(--safe));border-radius:24px;padding:12px;width:calc(100% - 32px);max-width:528px;z-index:18;box-shadow:0 8px 24px rgba(17,19,23,.12)">
+    <div class="chips" style="margin:0;padding:0">${isTr ? `<button class="chip out" style="height:32px;font-size:12px;font-weight:700" data-a="measure" data-m="weight" data-c="${client}">${t('q_measure')}</button><button class="chip ${S.notePriv ? 'on' : 'out'}" style="height:32px;font-size:12px;font-weight:700" data-a="notepriv">${ic('lock', 13)}${t('private')}</button>`
+      : `<button class="chip out" style="height:32px;font-size:12px;font-weight:700" data-a="measure" data-m="weight">${t('q_weight')}</button><button class="chip out" style="height:32px;font-size:12px;font-weight:700" data-a="wellbeing">${t('q_wb')}</button><button class="chip warnc" style="height:32px;font-size:12px" data-a="go" data-r="complaint">${t('q_hurts')}</button>`}</div>
+    <div class="row gap8"><label class="grow"><span class="hidden">${t('new_note')}</span><textarea id="note-in" class="inp" rows="1" style="min-height:46px;max-height:120px" placeholder="${isTr ? t('note_ph_tr') : t('note_ph')}"></textarea></label>
+    <button class="ibtn dk" style="width:46px;height:46px" data-a="notesend" data-c="${client || ''}" aria-label="${t('send')}">${ic('send', 18, 'var(--acc)', 2.2)}</button></div></div>`;
+  return out;
+}
+function noteHtml(n, isTr) {
+  const time = hm(n.created);
+  const who = `${av(n.author, 30)}<span class="s13 b grow">${n.mine ? t('you') : esc(n.author.first || n.author.name)} <span class="muted" style="font-weight:600">· ${time}</span></span>`;
+  const d = n.data || {};
+  if (n.kind === 'wellbeing') return `<div class="note col gap8"><div class="row between"><span class="s13 b">${t('wb_title')}</span><span class="small muted sb">${n.mine ? t('you') : esc(n.author.first)} · ${time}</span></div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">${[1, 2, 3, 4, 5].map((i) => `<span style="height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;${i === d.score ? 'background:var(--ink);color:#fff' : 'background:var(--bg);color:var(--soft)'}">${i}</span>`).join('')}</div>
+    ${d.sleep || n.text ? `<span class="s13 muted sb">${d.sleep ? t('sleep_h', num(d.sleep)) : ''}${d.sleep && n.text ? ' · ' : ''}${esc(n.text)}</span>` : ''}</div>`;
+  if (n.kind === 'measure') return `<div class="note row gap12" style="padding:12px 14px"><span class="ibtn" style="background:var(--bg);width:40px;height:40px;border-radius:12px">${ic('chart', 20)}</span><div class="col grow"><span class="s14 b">${t('m_' + d.metric)} ${num(d.value)} ${d.metric === 'fat' ? '%' : d.metric === 'weight' ? t('kg') : t('cm')}</span><span class="small muted sb">${n.mine ? t('you') : esc(n.author.first)} · ${time}</span></div>${d.delta != null ? `<span class="s13 b" style="color:${d.delta < 0 ? 'var(--ok)' : 'var(--muted)'}">${d.delta > 0 ? '+' : d.delta < 0 ? '−' : ''}${num(Math.abs(d.delta))}</span>` : ''}</div>`;
+  if (n.kind === 'complaint') return `<div class="note col gap6" style="background:var(--bad-bg)"><span class="s13 b row gap6" style="color:var(--bad)">${ic('pulse', 15, 'currentColor', 2.4)}${t('complaint')} · ${time}</span><span class="s14 b">${esc(d.zone)} · ${d.level}/10${d.when ? ' · ' + esc(d.when) : ''}</span>${n.text ? `<span class="s13" style="line-height:1.4">«${esc(n.text)}»</span>` : ''}</div>`;
+  if (n.kind === 'system') {
+    if (d.record) return `<div class="note row gap12" style="padding:12px 14px"><span class="ibtn" style="background:var(--acc);width:40px;height:40px;border-radius:12px">${ic('flame', 20)}</span><div class="col grow"><span class="s14 b">${t('new_record')}: ${esc(d.record)} — ${esc(d.value)}</span><span class="small muted sb">${time}</span></div></div>`;
+    if (d.handled) return `<div class="note col gap6" style="background:var(--ok-bg)"><span class="s13 b" style="color:var(--ok)">✓ ${t('cmp_handled_note', esc(d.zone))}</span>${n.text ? `<span class="s14" style="line-height:1.4">${esc(n.text)}</span>` : ''}</div>`;
+  }
+  return `<div class="note col gap8"><div class="row gap8">${who}${n.private ? `<span class="pill p-rep">${ic('lock', 11)}${t('private')}</span>` : ''}${n.mine && n.kind === 'note' ? `<button data-a="notedel" data-id="${n.id}" aria-label="${t('delete')}" style="padding:4px">${ic('trash', 15, 'var(--soft)')}</button>` : ''}</div><span class="s14" style="line-height:1.45;font-weight:500;white-space:pre-line">${esc(n.text)}</span></div>`;
+}
+function wellbeingSheet(bid) {
+  S.wb = { score: 0, bid };
+  const draw = () => `<div class="h2">${t('wb_q')}</div><p class="small muted sb">${t('wb_hint')}</p>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px" class="mt12">${[1, 2, 3, 4, 5].map((i) => `<button style="height:52px;border-radius:14px;font-size:18px;font-weight:800;${i === S.wb.score ? 'background:var(--ink);color:#fff' : 'background:var(--bg)'}" data-a="wbs" data-s="${i}">${i}</button>`).join('')}</div>
+    <div class="grid2 mt12"><label class="field"><span>${t('sleep')}</span><input id="wb-sleep" class="inp" inputmode="decimal" placeholder="7"></label><span></span></div>
+    <label class="field"><span>${t('comment')}</span><textarea id="wb-text" class="inp" rows="2" placeholder="${t('wb_ph')}"></textarea></label>
+    <button class="btn" data-a="wbsave" ${S.wb.score ? '' : 'disabled'}>${t('save')}</button>`;
+  sheet(draw()); S.wbDraw = draw;
+}
+
+// ── жалоба
+const ZONES = ['z_neck', 'z_shl', 'z_shr', 'z_back', 'z_low', 'z_elbow', 'z_wrist', 'z_knl', 'z_knr', 'z_ankle', 'z_foot', 'z_other'];
+async function viewComplaint() {
+  const C = S.cmp;
+  return `<div class="row gap12 mb8"><button class="ibtn" data-a="go" data-r="home" aria-label="${t('back')}">${ic('left', 18, 'currentColor', 2.4)}</button><span class="h2" style="font-size:22px">${t('cmp_title')}</span></div>
+    <div class="s13 muted sb" style="margin:0 0 4px 56px">${t('cmp_sub')}</div>
+    <span class="lbl">${t('where')}</span><div class="zones">${ZONES.map((z) => `<button class="${C.zone === t(z) ? 'on' : ''}" data-a="cz" data-z="${esc(t(z))}">${t(z)}</button>`).join('')}</div>
+    <span class="lbl">${t('how_strong', C.level)}</span><div class="lvl">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => `<button class="${n === C.level ? 'on' : n < C.level ? 'fill' : ''}" data-a="cl" data-l="${n}" aria-label="${n}">${n}</button>`).join('')}</div>
+    <span class="lbl">${t('when_hurts')}</span><div class="chips">${['w_rest', 'w_load', 'w_after'].map((w) => `<button class="chip ${C.when === t(w) ? 'on' : ''}" data-a="cw" data-w="${esc(t(w))}">${t(w)}</button>`).join('')}</div>
+    <label class="field mt16"><span>${t('comment')}</span><textarea id="cmp-text" class="inp" rows="3" style="background:#fff" placeholder="${t('cmp_ph')}">${esc(C.text || '')}</textarea></label>
+    <button class="btn" style="height:56px;border-radius:18px;font-size:16px" data-a="cmpsend" ${C.zone ? '' : 'disabled'}>${ic('send', 18, 'var(--acc)', 2.2)}${t('send_trainer')}</button>
+    <div class="row gap8 mt12 small muted sb" style="align-items:flex-start;line-height:1.4">${ic('alert', 14, 'var(--muted)', 2.2)}<span>${t('cmp_doctor')}</span></div>`;
+}
+
+// ── профиль клиента
+async function profileSheet() {
+  const H = S.home || (S.home = await call('home'));
+  const me = S.me, tr = H.trainer;
+  const pk = (H.packages || []);
+  sheet(`<div class="row gap12">${av(me, 56)}<div class="col grow"><span class="h2">${esc(me.name)}</span>${me.username ? `<span class="s13 muted sb">@${esc(me.username)}</span>` : ''}</div></div>
+    <span class="lbl">${t('your_trainer')}</span><div class="lrow" style="background:var(--bg)">${av(tr, 44)}<div class="col grow"><span class="s14 b">${esc(tr.name)}</span><span class="small muted sb">${esc(tr.title || '')}${tr.address ? (tr.title ? ' · ' : '') + esc(tr.address) : ''}</span></div>${tr.username ? `<button class="btn sm" data-a="tgchat" data-u="${esc(tr.username)}">${t('write')}</button>` : ''}</div>
+    <span class="lbl">${t('packages')}</span>
+    ${pk.length ? pk.map((p) => `<div class="card col gap8" style="background:var(--bg);margin-bottom:8px"><div class="row between"><span class="s14 b">${t('pkg_n', p.total)}${p.until ? ' · ' + t('until', fday(p.until, { day: 'numeric', month: 'short' })) : ''}</span>
+      <span class="pill ${p.paid ? 'p-ok' : p.claimed ? 'p-warn' : 'p-bad'}">${p.paid ? t('paid') : p.claimed ? t('pending') : t('unpaid')}</span></div>
+      <div class="segbar" style="grid-template-columns:repeat(${Math.min(p.total, 16)},1fr)">${Array.from({ length: Math.min(p.total, 16) }, (_, i) => `<span class="${i < Math.round((p.used / p.total) * Math.min(p.total, 16)) ? 'u' : ''}"></span>`).join('')}</div>
+      <span class="small muted sb">${t('left_of', p.left, p.total)}${p.price ? ' · ' + num(p.price, 0) + ' ₴' : ''}${p.expired ? ' · ' + t('expired') : ''}</span>
+      ${!p.paid && !p.claimed ? `${tr.card ? `<div class="row gap8" style="background:#fff;border-radius:12px;padding:8px 8px 8px 12px"><div class="col grow"><span class="small muted sb">${t('card_pay')}${tr.cardName ? ' · ' + esc(tr.cardName) : ''}</span><span class="s14 b" style="letter-spacing:.5px">${esc(tr.card)}</span></div><button class="btn sm soft" data-a="copy" data-v="${esc(tr.card.replace(/\s/g, ''))}">${ic('copy', 16)}</button></div>` : ''}
+        <button class="btn" style="height:46px" data-a="claim" data-id="${p.id}">${t('i_paid')}</button>` : ''}</div>`).join('') : `<div class="small muted sb">${t('no_packages')}</div>`}
+    <span class="lbl">${t('language')}</span><div class="seg"><button class="${S.lang === 'ru' ? 'on' : ''}" data-a="lang" data-l="ru">Русский</button><button class="${S.lang === 'uk' ? 'on' : ''}" data-a="lang" data-l="uk">Українська</button></div>
+    ${(H.history || []).length ? `<span class="lbl">${t('history')}</span>${H.history.slice(0, 8).map((b) => `<div class="row between s13" style="padding:8px 0;border-bottom:1px solid var(--line)"><span class="sb">${whenStr(b.ts, b.tz)}</span><span class="pill ${b.status === 'attended' ? 'p-ok' : 'p-warn'}">${t('st_' + b.status)}</span></div>`).join('')}` : ''}`);
+}
+
+// ── онбординг
+function viewOnboard() {
+  return `<div class="top"><span class="h1">${t('hello', esc(S.me.first || ''))}</span></div>
+    <div class="card dark col gap8" style="border-radius:26px;padding:20px"><span class="h2">${t('ob_client')}</span><span class="s14 muted" style="line-height:1.45">${t('ob_client_sub')}</span>
+    <label class="field mt8"><span class="hidden">${t('code')}</span><input id="ob-code" class="inp" style="background:rgba(255,255,255,.1);color:#fff" placeholder="${t('code_ph')}" autocomplete="off"></label><button class="btn acc" data-a="objoin">${t('join')}</button></div>
+    <div class="card mt10 col gap8"><span class="h2">${t('ob_trainer')}</span><span class="s14 muted" style="line-height:1.45">${t('ob_trainer_sub')}</span>
+    <label class="field mt8"><span class="hidden">${t('access_code')}</span><input id="ob-tcode" class="inp" placeholder="${t('access_code_ph')}" autocomplete="off"></label><button class="btn" data-a="obtrainer">${t('become_trainer')}</button></div>`;
+}
+
+// ═════════ ТРЕНЕР ═════════
+async function tweek(ws) { return load('tdays:' + ws, () => call('tdays', { from: ws, days: 7 }), 12000); }
+function miniHtml() {
+  if (S.role !== 'trainer' || !S.collapsed) return '';
+  const it = S.collapsed;
+  const m = it.members && it.members[0];
+  return `<button class="mini" data-a="expand">${it.kind === 'group' ? `<span class="ibtn" style="background:var(--acc);width:38px;height:38px">${ic('users', 18)}</span>` : av(m, 38)}<span class="col grow"><span class="small muted b">${it.t} – ${hm(Number(it.ts) + it.minutes * 60000)}</span><span class="s14 b ellip">${it.kind === 'group' ? esc(it.title) : esc(m ? m.name : '')}</span></span><span class="ibtn" style="background:var(--bg);width:40px;height:40px;border-radius:12px">${ic('up', 18, 'currentColor', 2.4)}</span></button>`;
+}
+async function viewDay(arg) {
+  const r = route();
+  if (r.name === 'week') S.td.view = 'week'; else if (r.name === 'day') S.td.view = 'day';
+  if (arg && /^\d{10,}$/.test(arg)) { S.td.day = dkey(Number(arg)); S.td.openTs = Number(arg); }
+  const td = today();
+  if (!S.td.day) S.td.day = td;
+  const ws = monday(S.td.day);
+  const W = await tweek(ws);
+  const D = W.find((d) => d.date === S.td.day) || W[0];
+  let out = `<div class="top"><span class="h1">${t('n_schedule')}</span><div class="row gap8"><button class="ibtn" data-a="go" data-r="more" aria-label="${t('settings')}">${ic('sliders', 20, 'currentColor', 2.2)}</button><button class="ibtn dk" data-a="newgroup" aria-label="${t('new_group')}">${ic('plus', 20, 'var(--acc)', 2.4)}</button></div></div>
+    <div class="seg"><button class="${S.td.view === 'day' ? 'on' : ''}" data-a="go" data-r="day">${t('v_day')}</button><button class="${S.td.view === 'week' ? 'on' : ''}" data-a="go" data-r="week">${t('v_week')}</button></div>
+    <div class="row between mb8"><button class="ibtn" style="width:36px;height:36px;border-radius:10px" data-a="tdweek" data-d="-7" aria-label="${t('prev_week')}">${ic('left', 16, 'currentColor', 2.2)}</button>
+      <span class="s14 b">${cap(fday(ws, { day: 'numeric', month: 'long' }))} – ${fday(addDays(ws, 6), { day: 'numeric', month: 'long' })}</span>
+      <button class="ibtn" style="width:36px;height:36px;border-radius:10px" data-a="tdweek" data-d="7" aria-label="${t('next_week')}">${ic('right', 16, 'currentColor', 2.2)}</button></div>`;
+  if (S.td.view === 'week') return out + weekGrid(W, ws);
+  out += `<div class="week">${W.map((d) => {
+    const pct = d.total ? Math.round((d.busy / Math.max(d.total, d.busy)) * 100) : d.busy ? 100 : 0;
+    return `<button class="wd ${d.date === D.date ? 'on' : d.date < td || (!d.total && !d.busy) ? 'dim' : ''} ${d.date === td ? 'today' : ''}" style="height:66px" data-a="tdday" data-d="${d.date}"><span class="d">${DOW()[d.dow - 1]}</span><span class="n" style="font-size:17px">${Number(d.date.slice(8))}</span><span class="bar"><i style="width:${pct}%"></i></span></button>`;
+  }).join('')}</div>`;
+  const sessions = D.items.filter((i) => i.type === 'session');
+  const frees = D.items.filter((i) => i.type === 'free' && !i.past);
+  out += `<div class="row between mb8" style="align-items:baseline"><span class="s14 b" style="font-size:16px">${longDay(D.date)}</span><span class="small muted b">${t('day_sum', sessions.length, frees.length)}</span></div>`;
+  if (D.off) out += `<div class="alert a-warn mb12">${t('day_is_off')} <button class="btn sm soft" style="margin-left:auto" data-a="dayon" data-d="${D.date}">${t('make_working')}</button></div>`;
+  if (!D.items.length) out += `<div class="empty">${t('no_hours')}<br><br><button class="btn sm" data-a="go" data-r="more">${t('set_hours')}</button></div>`;
+  let prevEnd = null, nowShown = D.date !== td;
+  const now = Date.now();
+  for (const it of D.items) {
+    const ts = Number(it.ts), mins = it.minutes || S.me.trainer.slot;
+    if (it.type === 'free' && it.past) { prevEnd = ts + mins * 60000; continue; }
+    if (prevEnd != null && ts > prevEnd + 60000) out += `<div class="brk">${hm(prevEnd)} – ${hm(ts)} · ${t('break')}</div>`;
+    if (!nowShown && ts > now) { nowShown = true; out += `<div class="now"><span style="width:52px">${hm(now)}</span><i></i><b></b></div>`; }
+    prevEnd = ts + mins * 60000;
+    out += `<div class="hrow" style="align-items:flex-start"><span class="tm" style="padding-top:18px">${hm(ts)}</span>${trItem(it)}</div>`;
+  }
+  if (!D.off && D.date >= td) out += `<button class="btn line mt8" style="height:44px;font-size:13px" data-a="dayoff" data-d="${D.date}">${t('make_off')}</button>`;
+  if (S.td.openTs) { const ot = S.td.openTs; S.td.openTs = null; const it = D.items.find((i) => Number(i.ts) === ot && i.type === 'session'); if (it) S.afterRender = () => sessionSheet(it); }
+  return out;
+}
+function trItem(it) {
+  if (it.type === 'free') return `<button class="slot dash" style="min-height:56px;border-radius:16px" data-a="freeslot" data-ts="${it.ts}">${ic('plus', 16, 'currentColor', 2.4)}${t('free_book')}</button>`;
+  if (it.kind === 'group') {
+    return `<button class="tcard grp" data-a="sess" data-id="${it.id}"><span class="stack">${it.members.slice(0, 4).map((m) => av(m, 26)).join('') || `<span class="ibtn" style="background:#fff;width:32px;height:32px">${ic('users', 16)}</span>`}</span>
+      <span class="col grow"><span class="s14 b ellip">${t('group')} · ${esc(it.title)}</span><span class="small b" style="color:var(--acc-ink)">${t('spots_of', it.members.length, it.capacity)}${it.format === 'online' ? ' · ' + t('online_s') : ''}</span></span>${ic('right', 16, 'currentColor', 2.4)}</button>`;
+  }
+  const m = it.members[0] || {};
+  const pills = [];
+  if (m.status === 'attended') pills.push(`<span class="pill p-ok">✓ ${t('came')}</span>`);
+  else if (m.status === 'noshow') pills.push(`<span class="pill p-bad">${t('noshow')}</span>`);
+  else if (m.confirmed) pills.push(`<span class="pill p-ok">✓ ${t('confirmed_s')}</span>`);
+  if (it.format === 'online') pills.push(`<span class="pill p-on">${t('online_s')}</span>`);
+  if (it.series) pills.push(`<span class="pill p-rep">↻${it.seriesDays ? ' ' + it.seriesDays.map((d) => DOW()[d - 1]).join(' ') : ''}</span>`);
+  if (m.complaint) pills.push(`<span class="pill p-bad">${t('cmp_pill', esc(m.complaint.zone))}</span>`);
+  if (m.left != null && m.left <= 1 && m.status === 'booked') pills.push(`<span class="pill p-warn">${t('left_n', m.left)}</span>`);
+  else if (m.left == null) pills.push(`<span class="pill p-warn">${t('no_pkg')}</span>`);
+  if (it.plan) pills.push(`<span class="pill p-rep">${t('plan')}</span>`);
+  return `<button class="tcard ${m.status === 'attended' || m.status === 'noshow' ? 'done' : ''}" data-a="sess" data-id="${it.id}">${av(m, 38)}<span class="col grow gap4"><span class="s14 b ellip">${esc(m.name)}</span><span class="row gap4" style="flex-wrap:wrap">${pills.join('')}</span></span>${ic('right', 16, 'var(--soft)', 2.4)}</button>`;
+}
+function weekGrid(W, ws) {
+  const all = W.flatMap((d) => d.items);
+  if (!all.length) return `<div class="empty">${t('no_hours')}</div>`;
+  const hours = all.map((i) => Number(hm(i.ts).slice(0, 2)));
+  const h0 = Math.min(...hours), h1 = Math.max(...all.map((i) => Math.ceil((Number(hm(i.ts).slice(0, 2)) * 60 + Number(hm(i.ts).slice(3)) + (i.minutes || S.me.trainer.slot)) / 60)));
+  const ROW = 30, H = (h1 - h0) * ROW, td = today();
+  let busy = 0, total = 0;
+  W.forEach((d) => { busy += d.busy; total += d.busy + d.items.filter((i) => i.type === 'free').length; });
+  const cols = W.map((d) => {
+    let inner = '';
+    const covered = new Set();
+    for (const it of d.items) {
+      const st = Number(hm(it.ts).slice(0, 2)) * 60 + Number(hm(it.ts).slice(3)) - h0 * 60, len = it.minutes || S.me.trainer.slot;
+      for (let h = Math.floor(st / 60); h < Math.ceil((st + len) / 60); h++) covered.add(h);
+      const pos = `top:${(st / 60) * ROW + 2}px;height:${(len / 60) * ROW - 4}px`;
+      if (it.type === 'free') { if (!it.past) inner += `<button class="wb f" style="${pos}" data-a="freeslot" data-ts="${it.ts}" aria-label="${t('free')}">+</button>`; continue; }
+      if (it.kind === 'group') inner += `<button class="wb g" style="${pos}" data-a="weekopen" data-ts="${it.ts}">${it.members.length}/${it.capacity}</button>`;
+      else { const m = it.members[0] || {}; inner += `<button class="wb p" style="${pos}" data-a="weekopen" data-ts="${it.ts}" aria-label="${esc(m.name)}">${esc(initials(m.name))}${it.format === 'online' ? '<span class="od"></span>' : ''}</button>`; }
+    }
+    for (let h = 0; h < h1 - h0; h++) if (!covered.has(h)) inner = `<span class="hatch" style="top:${h * ROW}px;height:${ROW}px"></span>` + inner;
+    return `<div class="wcol" style="height:${H}px;${d.date < td ? 'opacity:.5' : ''}">${inner}</div>`;
+  }).join('');
+  const pct = total ? Math.round((busy / total) * 100) : 0;
+  return `<div class="card row gap12 mb8" style="padding:10px 12px"><div class="col grow gap4"><div class="row between"><span class="s13 b">${t('load')}</span><span class="small muted b">${t('load_of', busy, total, pct)}</span></div><div class="prog l" style="height:6px"><i style="width:${pct}%"></i></div></div></div>
+    <div class="card" style="padding:8px 6px 8px 0"><div class="wgrid" style="margin-bottom:6px"><span></span>${W.map((d) => `<button class="col" style="align-items:center;gap:2px" data-a="tdday" data-d="${d.date}"><span style="font-size:10px;font-weight:700;color:${d.date < td ? 'var(--soft)' : 'var(--ink)'}">${DOW()[d.dow - 1]}</span><span style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;${d.date === td ? 'background:var(--ink);color:#fff' : ''}">${Number(d.date.slice(8))}</span></button>`).join('')}</div>
+    <div class="wgrid"><div style="position:relative;height:${H}px">${Array.from({ length: h1 - h0 - 1 }, (_, i) => `<span style="position:absolute;top:${(i + 1) * ROW - 6}px;right:4px;font-size:10px;font-weight:600;color:var(--muted)">${h0 + i + 1}</span>`).join('')}</div>${cols}</div></div>
+    <div class="row gap12 mt8 small muted b" style="justify-content:center;flex-wrap:wrap"><span class="row gap4"><span style="width:10px;height:10px;border-radius:3px;background:var(--ink)"></span>${t('personal_s')}</span><span class="row gap4"><span style="width:10px;height:10px;border-radius:3px;background:var(--acc);box-shadow:inset 0 0 0 1px var(--ink)"></span>${t('group')}</span><span class="row gap4"><span style="width:10px;height:10px;border-radius:3px;box-shadow:inset 0 0 0 1.5px var(--soft)"></span>${t('free')}</span><span class="row gap4"><span style="width:7px;height:7px;border-radius:50%;background:var(--dot)"></span>${t('online_s')}</span></div>`;
+}
+function findSession(id) {
+  for (const k of Object.keys(S.cache)) if (k.startsWith('tdays:')) for (const d of S.cache[k].v) for (const i of d.items) if (i.type === 'session' && String(i.id) === String(id)) return i;
+  return null;
+}
+function sessionSheet(it) {
+  S.collapsed = null; S.openSess = it;
+  const end = Number(it.ts) + it.minutes * 60000;
+  const started = Number(it.ts) - Date.now() < 3600000;
+  const head = `<div class="row between"><span class="s13 b muted">${it.t} – ${hm(end)} · ${it.kind === 'group' ? t('group') : t('personal_s')} · ${fmtName(it.format)}</span>
+    <button class="btn sm soft" style="height:36px" data-a="collapse">${ic('down', 14, 'currentColor', 2.4)}${t('collapse')}</button></div>`;
+  const plan = `<div class="col gap4 mt12"><div class="row between"><span class="small b muted" style="text-transform:uppercase;letter-spacing:.6px">${t('plan')}${it.plan && it.plan.title ? ' · ' + esc(it.plan.title) : ''}</span><button class="btn sm soft" style="height:32px;font-size:12px" data-a="planedit" data-id="${it.id}">${it.plan ? t('edit') : t('make_plan')}</button></div>
+    ${it.plan ? it.plan.items.map((x, i) => `<div class="ex" style="min-height:30px"><span class="no" style="width:22px;height:22px">${i + 1}</span><span class="s13 b grow">${esc(x.n)}${x.x ? ` <span class="pill p-warn" style="font-size:10px">${t('replaced')}</span>` : ''}</span><span class="small muted b">${esc(x.s)}</span></div>`).join('') : `<span class="small muted sb">${t('plan_none')}</span>`}</div>`;
+  if (it.kind === 'group') {
+    sheet(head + `<div class="h2 mt8">${esc(it.title)}</div><span class="s13 muted sb">${t('spots_of', it.members.length, it.capacity)}</span>
+      <div class="col gap6 mt12">${it.members.map((m) => `<div class="row gap8" style="background:var(--bg);border-radius:14px;padding:8px">${av(m, 34)}<span class="s14 b grow ellip">${esc(m.name)}</span>
+        ${started ? `<button class="btn sm ${m.status === 'attended' ? '' : 'soft'}" style="height:34px" data-a="attend" data-id="${m.bid}" data-s="${m.status === 'attended' ? 'booked' : 'attended'}">✓</button><button class="btn sm ${m.status === 'noshow' ? 'bad' : 'soft'}" style="height:34px" data-a="attend" data-id="${m.bid}" data-s="${m.status === 'noshow' ? 'booked' : 'noshow'}">✕</button>` : m.confirmed ? `<span class="pill p-ok">✓</span>` : ''}</div>`).join('') || `<span class="small muted">${t('no_members')}</span>`}</div>
+      ${plan}<button class="btn bad mt16" data-a="sesscancel" data-id="${it.id}">${t('cancel_session')}</button>`, { onBg: () => closeSheet() });
+    return;
+  }
+  const m = it.members[0] || {};
+  const c = m.complaint;
+  sheet(head + `<div class="row gap12 mt12">${av(m, 56)}<div class="col grow gap4"><span class="h2 ellip">${esc(m.name)}</span><span class="small muted sb">${m.username ? '@' + esc(m.username) + ' · ' : ''}${m.left == null ? t('no_pkg') : t('left_n', m.left)}${it.series ? ' · ↻' : ''}</span></div>
+    <button class="btn sm soft" data-a="go" data-r="client/${m.id}">${t('card')}</button></div>
+    ${c ? `<div class="col gap8 mt12" style="background:var(--bad-bg);border-radius:16px;padding:12px"><span class="s13 b row gap6" style="color:var(--bad)">${ic('pulse', 15, 'currentColor', 2.4)}${t('complaint')} · ${whenStr(c.created)}</span>
+      <span class="s14 b">${esc(c.zone)} · ${c.level}/10${c.when ? ' · ' + esc(c.when) : ''}${c.comment ? '. «' + esc(c.comment) + '»' : ''}</span>
+      <div class="grid2"><button class="btn sm" style="background:#fff;color:var(--bad);width:100%" data-a="planedit" data-id="${it.id}">${t('change_plan')}</button><button class="btn sm soft" style="background:#fff;width:100%" data-a="cmphandle" data-id="${c.id}">✓ ${t('handled')}</button></div></div>` : ''}
+    ${plan}
+    <div style="display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:8px" class="mt16">
+      <button class="btn soft" style="font-size:13px" data-a="tgchat" data-u="${esc(m.username || '')}">${ic('send', 16)}${t('write')}</button>
+      ${m.status === 'booked' ? (started ? `<button class="btn soft" style="font-size:13px;font-weight:700" data-a="attend" data-id="${m.bid}" data-s="noshow">${t('noshow')}</button>
+        <button class="btn" style="font-size:14px" data-a="attend" data-id="${m.bid}" data-s="attended"><span style="width:22px;height:22px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center">${ic('check', 13, 'var(--ink)', 3)}</span>${t('done')}</button>`
+        : `<button class="btn soft" style="font-size:13px;font-weight:700" data-a="tmove" data-id="${it.id}">${t('move')}</button><button class="btn bad" style="font-size:13px" data-a="tcancel" data-id="${m.bid}">${t('cancel')}</button>`)
+      : `<span class="pill ${m.status === 'attended' ? 'p-ok' : 'p-bad'}" style="justify-content:center;font-size:13px">${m.status === 'attended' ? '✓ ' + t('came') : t('noshow')}</span><button class="btn soft" style="font-size:13px" data-a="attend" data-id="${m.bid}" data-s="booked">${t('undo')}</button>`}</div>`, { onBg: () => closeSheet() });
+}
+function planEditor(it) {
+  const p = it.plan || { title: '', items: [], note: '' };
+  S.pe = { sid: it.id, ts: it.ts, title: p.title || '', items: (p.items || []).map((x) => ({ ...x })), note: p.note || '', client: it.kind === 'personal' && it.members[0] ? it.members[0].id : null };
+  if (!S.pe.items.length) S.pe.items.push({ n: '', s: '', x: false });
+  drawPlan();
+}
+function drawPlan() {
+  const P = S.pe;
+  sheet(`<div class="row between"><span class="h2">${t('plan')}</span><button class="btn sm soft" data-a="plancopy">${ic('copy', 14)}${t('copy_last')}</button></div>
+    <label class="field mt12"><span>${t('plan_title')}</span><input class="inp" data-in="pt" value="${esc(P.title)}" placeholder="${t('plan_title_ph')}"></label>
+    ${P.items.map((x, i) => `<div class="row gap6 mb8"><span class="ex" style="min-height:0"><span class="no">${i + 1}</span></span><input class="inp grow" style="height:44px" data-in="pn" data-i="${i}" value="${esc(x.n)}" placeholder="${t('ex_ph')}"><input class="inp" style="height:44px;width:92px" data-in="ps" data-i="${i}" value="${esc(x.s)}" placeholder="4×8">
+      <button class="ibtn" style="width:40px;height:44px;background:${x.x ? 'var(--warn-bg)' : 'var(--bg)'}" data-a="px" data-i="${i}" aria-label="${t('replaced')}" title="${t('replaced')}">${ic('repeat', 16, x.x ? 'var(--warn)' : 'var(--soft)')}</button></div>`).join('')}
+    <button class="btn soft" style="height:44px" data-a="padd">${ic('plus', 16)}${t('add_ex')}</button>
+    <label class="field mt12"><span>${t('plan_note')}</span><textarea class="inp" rows="2" data-in="pnote" placeholder="${t('plan_note_ph')}">${esc(P.note)}</textarea></label>
+    <div class="grid2"><button class="btn soft" data-a="plandel">${t('clear')}</button><button class="btn" data-a="plansave">${t('save_notify')}</button></div>`);
+}
+function freeSheet(ts) {
+  const cl = S.cache.clients ? S.cache.clients.v : null;
+  S.fs = { ts, format: 'gym', q: '' };
+  const draw = (list) => `<div class="h2">${whenStr(ts)}</div><span class="s13 muted sb">${t('free_window')}</span>
+    <div class="seg mt12"><button class="${S.fs.format === 'gym' ? 'on' : ''}" data-a="fsfmt" data-f="gym">${t('gym_s')}</button><button class="${S.fs.format === 'online' ? 'on' : ''}" data-a="fsfmt" data-f="online">${t('online_s')}</button></div>
+    <span class="lbl">${t('book_client')}</span><div style="max-height:40vh;overflow:auto">${(list || []).map((c) => `<button class="lrow" style="background:var(--bg)" data-a="tbook" data-c="${c.id}">${av(c, 36)}<span class="col grow"><span class="s14 b">${esc(c.name)}</span><span class="small muted sb">${c.left == null ? t('no_pkg') : t('left_n', c.left)}</span></span>${ic('plus', 16)}</button>`).join('') || `<div class="small muted">${t('no_clients')}</div>`}</div>
+    <button class="btn line mt12" data-a="newgroup" data-ts="${ts}">${ic('users', 16)}${t('group_here')}</button>`;
+  S.fsDraw = draw;
+  sheet(draw(cl));
+  if (!cl) load('clients', () => call('clients')).then((l) => { if (document.getElementById('sheet')) document.getElementById('sheet').innerHTML = '<div class="grab"></div>' + draw(l); });
+}
+function groupSheet(ts) {
+  const d = ts ? dkey(ts) : S.td.day || today(), tm = ts ? hm(ts) : '18:00';
+  sheet(`<div class="h2">${t('new_group')}</div>
+    <label class="field mt12"><span>${t('g_title')}</span><input id="g-title" class="inp" placeholder="${t('g_title_ph')}"></label>
+    <div class="grid2"><label class="field"><span>${t('date')}</span><input id="g-date" class="inp" type="date" value="${d}" min="${today()}"></label><label class="field"><span>${t('time')}</span><input id="g-time" class="inp" type="time" value="${tm}" step="300"></label></div>
+    <div class="grid2"><label class="field"><span>${t('g_cap')}</span><input id="g-cap" class="inp" inputmode="numeric" value="8"></label><label class="field"><span>${t('g_min')}</span><input id="g-min" class="inp" inputmode="numeric" value="${S.me.trainer.slot}"></label></div>
+    <label class="field"><span>${t('g_repeat')}</span><select id="g-weeks" class="inp"><option value="1">${t('g_once')}</option><option value="4">${t('weeks_n', 4)}</option><option value="8">${t('weeks_n', 8)}</option><option value="12">${t('weeks_n', 12)}</option></select></label>
+    <label class="field"><span>${t('format')}</span><select id="g-fmt" class="inp"><option value="gym">${t('gym_s')}</option><option value="online">${t('online_s')}</option></select></label>
+    <button class="btn" data-a="gsave">${t('create')}</button>`);
+}
+
+// ── клиенты
+async function viewClients() {
+  const L = await load('clients', () => call('clients'));
+  const me = S.me;
+  const stale = (c) => (c.last ? Date.now() - c.last > 14 * 86400000 : Date.now() - c.since > 14 * 86400000) && !c.next;
+  const pkgFlag = (c) => c.claimed || c.unpaid || (c.left != null && c.left <= 1) || (c.left == null && c.next);
+  const attention = (c) => c.complaint || pkgFlag(c) || stale(c);
+  const F = { all: () => true, cmp: (c) => c.complaint, pkg: pkgFlag, stale };
+  const q = S.q.trim().toLowerCase();
+  const list = L.filter((c) => F[S.cf](c) && (!q || (c.name + ' ' + (c.username || '')).toLowerCase().includes(q)));
+  const row = (c) => {
+    const pills = [];
+    if (c.complaint) pills.push(`<span class="pill p-bad">${t('complaint_s')}</span>`);
+    if (c.claimed) pills.push(`<span class="pill p-warn">${t('paid_check')}</span>`);
+    else if (c.left != null && c.left <= 1) pills.push(`<span class="pill p-warn">${t('renew')}</span>`);
+    else if (stale(c)) pills.push(`<span class="pill p-rep">${t('call_back')}</span>`);
+    const sub = [c.left == null ? t('no_pkg') : t('left_n', c.left), c.next ? whenStr(c.next) : c.last ? t('last_visit', fday(dkey(c.last), { day: 'numeric', month: 'short' })) : ''].filter(Boolean).join(' · ');
+    return `<button class="lrow" data-a="go" data-r="client/${c.id}">${av(c, 44)}<span class="col grow gap4" style="min-width:0"><span class="s14 b ellip" style="font-size:15px">${esc(c.name)}${c.series ? ' <span class="muted" style="font-weight:600">↻</span>' : ''}</span><span class="small muted sb ellip">${sub}</span></span>${pills.join('')}${ic('right', 16, 'var(--soft)', 2.4)}</button>`;
+  };
+  let out = `<div class="top"><span class="h1">${t('n_clients')}</span><button class="btn sm" style="height:44px;border-radius:14px" data-a="invite">${ic('link', 16, 'var(--acc)', 2.2)}${t('invite')}</button></div>
+    <label class="row gap8" style="height:46px;border-radius:14px;background:#fff;padding:0 14px;margin-bottom:10px">${ic('search', 18, 'var(--muted)')}<span class="hidden">${t('search')}</span><input class="grow" data-in="q" value="${esc(S.q)}" placeholder="${t('search_ph')}" style="border:none;outline:none;background:transparent;font-size:15px;height:44px"></label>
+    <div class="chips mb12">${[['all', t('f_all') + ' · ' + L.length], ['cmp', t('f_complaint') + ' · ' + L.filter(F.cmp).length], ['pkg', t('f_pkg') + ' · ' + L.filter(F.pkg).length], ['stale', t('f_stale') + ' · ' + L.filter(F.stale).length]].map(([k, l]) => `<button class="chip ${S.cf === k ? 'on' : ''}" data-a="cf" data-k="${k}">${l}</button>`).join('')}</div>`;
+  if (!L.length) return out + `<div class="card col gap8 center" style="padding:24px"><span class="h2">${t('no_clients_title')}</span><span class="s14 muted" style="line-height:1.45">${t('no_clients_sub')}</span><button class="btn acc mt8" data-a="invite">${ic('share', 16)}${t('send_invite')}</button></div>`;
+  const att = S.cf === 'all' && !q ? list.filter(attention) : [];
+  if (att.length) out += `<span class="lbl" style="margin-top:4px">${t('attention')}</span>` + att.map(row).join('') + `<span class="lbl">${t('all_clients')}</span>`;
+  out += list.map(row).join('') || `<div class="empty">${t('nothing_found')}</div>`;
+  return out;
+}
+
+async function viewClient(arg) {
+  const id = Number(arg);
+  const C = await load('card:' + id, () => call('card', { client: id }), 8000);
+  const pk = (C.packages || []).find((p) => !p.expired && (p.left > 0 || !p.paid)) || (C.packages || [])[0];
+  const nx = (C.upcoming || [])[0];
+  const openC = (C.complaints || []).filter((c) => c.status === 'open');
+  const wb = C.wellbeing || [];
+  const w = C.weight || [];
+  const act = (icn, label, a, extra = '') => `<button class="col" style="height:64px;border-radius:16px;background:#fff;font-size:11px;font-weight:700;align-items:center;justify-content:center;gap:4px" data-a="${a}" ${extra}>${ic(icn, 20)}${label}</button>`;
+  let out = `<div class="top"><button class="ibtn" data-a="go" data-r="clients" aria-label="${t('back')}">${ic('left', 18, 'currentColor', 2.4)}</button><span class="s14 b">${t('client')}</span><button class="ibtn" data-a="clmore" data-id="${id}" aria-label="${t('more')}">${ic('more', 18)}</button></div>
+    <div class="row gap12 mb12">${av(C, 68)}<div class="col gap4 grow"><span style="font-size:22px;font-weight:800;letter-spacing:-.4px">${esc(C.name)}</span><span class="s13 muted sb">${C.username ? '@' + esc(C.username) + ' · ' : ''}${t('since', fday(dkey(C.since), { day: 'numeric', month: 'long', year: 'numeric' }))}</span>
+      <div class="row gap6" style="flex-wrap:wrap">${C.goal && C.goal.text ? `<span class="pill" style="background:#fff">${t('goal')}: ${esc(C.goal.text)}</span>` : ''}${(C.series || []).length ? `<span class="pill" style="background:#fff">↻ ${C.series.map((s) => DOW()[s.dow - 1] + ' ' + s.t).join(', ')}</span>` : ''}<span class="pill" style="background:#fff">${t('visits_n', C.visits)}</span></div></div></div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px">${act('send', t('write'), 'tgchat', `data-u="${esc(C.username || '')}"`)}${act('cal', t('book_s'), 'cbook', `data-c="${id}"`)}${act('chart', t('measure'), 'measure', `data-m="weight" data-c="${id}"`)}${act('note', t('note_s'), 'go', `data-r="cnotes/${id}"`)}</div>`;
+  // абонемент
+  if (pk) {
+    out += `<div class="card dark col gap8"><div class="row between"><div class="col"><span class="small muted sb">${t('pkg_n', pk.total)}${pk.until ? ' · ' + t('until', fday(pk.until, { day: 'numeric', month: 'long' })) : ''}${pk.price ? ' · ' + num(pk.price, 0) + ' ₴' : ''}</span><span style="font-size:22px;font-weight:800">${t('left_of', pk.left, pk.total)}</span></div>
+      <span class="pill ${pk.paid ? 'p-acc' : pk.claimed ? 'p-warn' : 'p-bad'}" style="font-size:11px;padding:6px 10px;border-radius:999px">${pk.paid ? t('paid') : pk.claimed ? t('paid_check') : t('unpaid')}</span></div>
+      <div class="row gap8" style="border-top:1px solid rgba(255,255,255,.12);padding-top:10px">${!pk.paid ? `<button class="btn sm acc" style="box-shadow:none" data-a="pconfirm" data-id="${pk.id}">✓ ${pk.claimed ? t('money_came') : t('mark_paid')}</button>` : ''}<button class="btn sm soft" data-a="pkgadd" data-c="${id}">${ic('plus', 14, '#fff')}${t('new_pkg')}</button></div></div>`;
+  } else out += `<div class="card row gap12"><div class="col grow"><span class="s14 b">${t('no_pkg_title')}</span><span class="small muted sb">${t('no_pkg_sub')}</span></div><button class="btn sm" data-a="pkgadd" data-c="${id}">${ic('plus', 14, '#fff')}${t('add')}</button></div>`;
+  if (nx) out += `<button class="lrow mt10" data-a="openday" data-ts="${nx.ts}"><div class="col" style="width:48px;height:48px;border-radius:14px;background:var(--bg);align-items:center;justify-content:center"><span class="muted" style="font-size:10px;font-weight:700">${esc(fday(dkey(nx.ts), { weekday: 'short' }).toUpperCase())}</span><span style="font-size:17px;font-weight:800;line-height:1">${Number(dkey(nx.ts).slice(8))}</span></div>
+    <div class="col grow"><span class="s14 b">${hm(nx.ts)} · ${nx.kind === 'group' ? esc(nx.title) : t('personal_s')}</span><span class="small muted sb">${fmtName(nx.format)} · ${t('sessions_ahead', C.upcoming.length)}</span></div>${nx.confirmed ? `<span class="pill p-ok">${t('confirmed_s')}</span>` : ''}</button>`;
+  for (const c of openC) out += `<div class="card mt10 row gap12" style="background:var(--bad-bg);padding:12px 14px"><span class="ibtn" style="width:40px;height:40px;border-radius:12px">${ic('pulse', 18, 'var(--bad)', 2.4)}</span><div class="col grow"><span class="s14 b">${esc(c.zone)} · ${c.level}/10</span><span class="small sb" style="color:#7A271A">${esc(c.when)}${c.comment ? ' · «' + esc(c.comment) + '»' : ''} · ${fday(dkey(c.created), { day: 'numeric', month: 'short' })}</span></div><button class="btn sm" style="background:#fff;color:var(--ink)" data-a="cmphandle" data-id="${c.id}">✓</button></div>`;
+  const handled = (C.complaints || []).filter((c) => c.status === 'handled').slice(0, 1);
+  for (const c of handled) out += `<div class="card mt10 row gap12" style="padding:12px 14px"><span class="ibtn" style="background:var(--ok-bg);width:40px;height:40px;border-radius:12px">${ic('check', 18, 'var(--ok)', 2.6)}</span><div class="col grow"><span class="s14 b">${esc(c.zone)} · ${c.level}/10</span><span class="small muted sb">${esc(c.reply || t('handled'))}</span></div><span class="pill p-ok">${t('handled')}</span></div>`;
+  out += `<button class="card mt10 col gap6" style="width:100%;text-align:left;padding:12px 14px" data-a="editf" data-f="pinned" data-c="${id}"><span class="small b muted row gap6" style="text-transform:uppercase;letter-spacing:.5px">${ic('pin', 12, 'var(--muted)', 2.4)}${t('pinned_for')}</span><span class="s13 sb" style="white-space:pre-line;line-height:1.4">${C.pinned ? esc(C.pinned) : `<span class="muted">${t('pinned_ph')}</span>`}</span></button>
+    <button class="card mt10 col gap6" style="width:100%;text-align:left;padding:12px 14px;box-shadow:inset 0 0 0 1.5px #C5C9D0" data-a="editf" data-f="privateNote" data-c="${id}"><span class="small b muted row gap6" style="text-transform:uppercase;letter-spacing:.5px">${ic('lock', 12, 'var(--muted)', 2.4)}${t('only_you')}</span><span class="s13 sb" style="white-space:pre-line;line-height:1.4">${C.privateNote ? esc(C.privateNote) : `<span class="muted">${t('private_ph')}</span>`}</span></button>
+    <div class="grid2 mt10"><div class="card col gap6" style="padding:12px 14px"><span class="small b muted">${t('m_weight')} · ${w.length ? num(w[w.length - 1][1]) + ' ' + t('kg') : '—'}</span>${spark(w.map((x) => Number(x[1])), 140, 40)}<span class="small b" style="color:var(--ok)">${w.length > 1 ? (w[w.length - 1][1] - w[0][1] > 0 ? '+' : '−') + num(Math.abs(w[w.length - 1][1] - w[0][1])) + ' ' + t('kg') : ''}</span></div>
+    <div class="card col gap6" style="padding:12px 14px"><span class="small b muted">${t('wb_trend', wb.length)}</span><div style="display:grid;grid-template-columns:repeat(6,1fr);gap:5px;height:40px;align-items:end">${wb.map((s) => `<span style="height:${s * 8}px;border-radius:4px;background:var(--ink)"></span>`).join('')}</div><span class="small b">${wb.length ? t('avg', num(wb.reduce((a, b) => a + b, 0) / wb.length)) : t('no_data')}</span></div></div>
+    <div class="card mt10"><div class="row between"><span class="s14 b">${t('goal')}</span><button class="btn sm soft" style="height:32px;font-size:12px" data-a="goaledit" data-c="${id}">${t('edit')}</button></div><span class="s13 muted sb">${C.goal && (C.goal.text || C.goal.value) ? esc(C.goal.text || '') + (C.goal.value ? ` (${t('m_' + (C.goal.metric || 'weight'))} ${num(C.goal.value)})` : '') + (C.goal.date ? ' · ' + fday(C.goal.date, { day: 'numeric', month: 'long' }) : '') : t('goal_none')}</span></div>
+    <div class="grid2 mt10"><button class="btn soft" style="background:#fff" data-a="recadd" data-c="${id}">${ic('flame', 16)}${t('add_record')}</button><button class="btn soft" style="background:#fff" data-a="go" data-r="cnotes/${id}">${ic('note', 16)}${t('notes_feed')}</button></div>`;
+  return out;
+}
+function editFieldSheet(id, f) {
+  const C = S.cache['card:' + id] && S.cache['card:' + id].v;
+  sheet(`<div class="h2">${t(f === 'pinned' ? 'pinned_for' : 'only_you')}</div><p class="small muted sb">${t(f === 'pinned' ? 'pinned_hint' : 'private_hint')}</p>
+    <textarea id="ef-v" class="inp" rows="5">${esc(C ? C[f] : '')}</textarea><button class="btn mt12" data-a="efsave" data-f="${f}" data-c="${id}">${t('save')}</button>`);
+}
+function pkgSheet(id) {
+  S.pk = { total: 8, days: 30, paid: false, client: id };
+  const draw = () => `<div class="h2">${t('new_pkg')}</div><span class="lbl">${t('sessions_count')}</span><div class="chips">${[1, 4, 8, 12, 16].map((n) => `<button class="chip ${S.pk.total === n ? 'on' : 'out'}" data-a="pkt" data-n="${n}">${n}</button>`).join('')}</div>
+    <span class="lbl">${t('valid')}</span><div class="chips">${[[30, t('days_n', 30)], [60, t('days_n', 60)], [90, t('days_n', 90)], [0, t('no_limit')]].map(([n, l]) => `<button class="chip ${S.pk.days === n ? 'on' : 'out'}" data-a="pkd" data-n="${n}">${l}</button>`).join('')}</div>
+    <label class="field mt16"><span>${t('price')} (₴)</span><input id="pk-price" class="inp" inputmode="numeric" placeholder="3200"></label>
+    <button class="row gap12 mb12" style="width:100%" data-a="pkpaid"><span class="tog ${S.pk.paid ? 'on' : ''}"></span><span class="s14 b">${t('already_paid')}</span></button>
+    <p class="small muted sb" style="line-height:1.4">${S.pk.paid ? '' : t('pkg_send_hint')}</p><button class="btn" data-a="pksave">${t('create')}</button>`;
+  S.pkDraw = draw; sheet(draw());
+}
+async function clientBookSheet(id) {
+  const td = today();
+  const ws = monday(td), W1 = await tweek(ws), W2 = await tweek(addDays(ws, 7));
+  const days = [...W1, ...W2].filter((d) => d.date >= td && d.items.some((i) => i.type === 'free' && !i.past));
+  sheet(`<div class="h2">${t('book_s')}</div><span class="s13 muted sb">${t('pick_slot')}</span><div style="max-height:60vh;overflow:auto" class="mt12">
+    ${days.map((d) => `<span class="lbl" style="margin-top:8px">${longDay(d.date)}</span><div class="chips" style="flex-wrap:wrap;margin:0;padding:0">${d.items.filter((i) => i.type === 'free' && !i.past).map((i) => `<button class="chip out" data-a="tbook" data-c="${id}" data-ts="${i.ts}">${i.t}</button>`).join('')}</div>`).join('') || `<div class="empty">${t('no_free')}</div>`}</div>`);
+}
+
+// ── оплаты
+async function viewPay() {
+  const P = await load('payments', () => call('payments'), 10000);
+  const items = P.items || [];
+  S.payBadge = items.filter((p) => p.claimed && !p.paid).length || 0;
+  const row = (p, btn) => `<div class="lrow">${av(p.client, 40)}<div class="col grow gap4" style="min-width:0"><span class="s14 b ellip">${esc(p.client.name)}</span><span class="small muted sb">${t('pkg_n', p.total)}${p.price ? ' · ' + num(p.price, 0) + ' ₴' : ''} · ${p.paid ? t('left_of', p.total - p.used, p.total) : cap(fday(dkey(p.created), { day: 'numeric', month: 'short' }))}</span></div>${btn}</div>`;
+  const claimed = items.filter((p) => p.claimed && !p.paid), unpaid = items.filter((p) => !p.claimed && !p.paid), paid = items.filter((p) => p.paid);
+  const month = cap(new Intl.DateTimeFormat(LOC(), { month: 'long', timeZone: TZ() }).format(new Date()));
+  let out = `<div class="top"><span class="h1">${t('n_pay')}</span></div>
+    <div class="card dark col gap4"><span class="s13 muted sb">${t('month_income', month)}</span><span style="font-size:34px;font-weight:800;letter-spacing:-1px">${num(P.month, 0)} ₴</span><span class="small muted sb">${t('month_sessions', P.monthCount)}</span></div>`;
+  if (claimed.length) out += `<span class="lbl">${t('wait_confirm')}</span>` + claimed.map((p) => row(p, `<button class="btn sm acc" style="box-shadow:none" data-a="pconfirm" data-id="${p.id}">✓ ${t('money_came')}</button>`)).join('');
+  if (unpaid.length) out += `<span class="lbl">${t('not_paid')}</span>` + unpaid.map((p) => row(p, `<button class="btn sm soft" data-a="pconfirm" data-id="${p.id}">${t('mark_paid')}</button>`)).join('');
+  if ((P.noPackage || []).length) out += `<span class="lbl">${t('no_pkg_list')}</span><div class="chips" style="flex-wrap:wrap;margin:0;padding:0">${P.noPackage.map((c) => `<button class="chip" data-a="go" data-r="client/${c.id}">${esc(c.name)}</button>`).join('')}</div>`;
+  if (paid.length) out += `<span class="lbl">${t('paid_recent')}</span>` + paid.slice(0, 15).map((p) => row(p, `<span class="pill p-ok">${t('paid')}</span>`)).join('');
+  if (!items.length) out += `<div class="empty">${t('pay_empty')}</div>`;
+  return out;
+}
+
+// ── ещё / настройки
+async function viewMore() {
+  const St = (S.set = await load('settings', () => call('settings'), 30000));
+  if (!S.hours) S.hours = JSON.parse(JSON.stringify(St.hours));
+  const H = S.hours;
+  const chips = (key, vals, cur, fmt) => `<div class="chips mb8">${vals.map((v) => `<button class="chip ${Number(cur) === v ? 'on' : 'out'}" data-a="setv" data-k="${key}" data-v="${v}">${fmt(v)}</button>`).join('')}</div>`;
+  let out = `<div class="top"><span class="h1">${t('settings')}</span></div>
+    <div class="card dark col gap8"><span class="s14 b">${t('invite_link')}</span><span class="s13 muted sb" style="word-break:break-all">${esc(St.link)}</span>
+      <div class="grid2"><button class="btn soft" style="height:44px" data-a="copy" data-v="${esc(St.link)}">${ic('copy', 16, '#fff')}${t('copy')}</button><button class="btn acc" style="height:44px;box-shadow:none" data-a="invite">${ic('share', 16)}${t('share')}</button></div>
+      <span class="small muted sb">${t('clients_n', St.clientsCount)}</span></div>
+    <span class="lbl">${t('profile')}</span><div class="card">
+      <label class="field"><span>${t('s_title')}</span><input class="inp" data-in="set" data-k="title" value="${esc(St.title)}" placeholder="${t('s_title_ph')}"></label>
+      <label class="field" style="margin:0"><span>${t('s_address')}</span><input class="inp" data-in="set" data-k="address" value="${esc(St.address)}" placeholder="${t('s_address_ph')}"></label></div>
+    <span class="lbl">${t('s_payment')}</span><div class="card">
+      <label class="field"><span>${t('s_card')}</span><input class="inp" inputmode="numeric" data-in="set" data-k="card" value="${esc(St.card)}" placeholder="4441 1111 2222 3333"></label>
+      <label class="field" style="margin:0"><span>${t('s_card_name')}</span><input class="inp" data-in="set" data-k="cardName" value="${esc(St.cardName)}" placeholder="${t('s_card_name_ph')}"></label></div>
+    <span class="lbl">${t('s_rules')}</span><div class="card"><span class="small b muted">${t('s_slot')}</span>${chips('slot', [45, 60, 90], (S.setf && S.setf.slot) || St.slot, (v) => v + ' ' + t('min'))}
+      <span class="small b muted">${t('s_notice')}</span>${chips('notice', [0, 1, 2, 6, 12, 24], S.setf && S.setf.notice != null ? S.setf.notice : St.notice, (v) => v + ' ' + t('h'))}
+      <span class="small b muted">${t('s_cancel')}</span>${chips('cancelHours', [0, 6, 12, 24], S.setf && S.setf.cancelHours != null ? S.setf.cancelHours : St.cancelHours, (v) => v + ' ' + t('h'))}</div>
+    <span class="lbl">${t('s_hours')}</span><div class="card col gap8">${[1, 2, 3, 4, 5, 6, 7].map((d) => {
+      const rs = H.map((h, i) => ({ ...h, i })).filter((h) => h.dow === d);
+      return `<div class="row gap8" style="align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)"><button class="tog ${rs.length ? 'on' : ''}" style="margin-top:7px" data-a="hday" data-d="${d}" aria-label="${DOW()[d - 1]}"></button><span class="s14 b" style="width:28px;margin-top:11px">${DOW()[d - 1]}</span>
+        <div class="col gap6 grow">${rs.length ? rs.map((r) => `<div class="row gap6"><input class="inp" type="time" step="900" style="height:42px;padding:0 8px" data-in="hf" data-i="${r.i}" value="${r.from}"><span class="muted">–</span><input class="inp" type="time" step="900" style="height:42px;padding:0 8px" data-in="ht" data-i="${r.i}" value="${r.to}"><button class="ibtn" style="width:36px;height:42px;background:var(--bg)" data-a="hdel" data-i="${r.i}" aria-label="${t('delete')}">${ic('x', 14)}</button></div>`).join('') + `<button class="small b muted" style="text-align:left;padding:4px 0" data-a="hadd" data-d="${d}">+ ${t('add_range')}</button>` : `<span class="small muted sb" style="margin-top:12px">${t('day_off_s')}</span>`}</div></div>`;
+    }).join('')}</div>
+    <span class="lbl">${t('days_off')}</span><div class="card col gap8"><div class="row gap8"><input id="off-d" class="inp" type="date" min="${today()}"><button class="btn sm" data-a="offadd">${t('add')}</button></div>
+      ${(St.daysOff || []).filter((d) => d >= today()).map((d) => `<div class="row between s14 sb">${longDay(d)}<button class="btn sm soft" style="height:32px" data-a="offdel" data-d="${d}">${ic('x', 14)}</button></div>`).join('')}</div>
+    <span class="lbl">${t('language')}</span><div class="seg"><button class="${S.lang === 'ru' ? 'on' : ''}" data-a="lang" data-l="ru">Русский</button><button class="${S.lang === 'uk' ? 'on' : ''}" data-a="lang" data-l="uk">Українська</button></div>
+    <div style="height:70px"></div><div class="bar-bottom" style="bottom:calc(var(--nav) + 22px + var(--safe));width:calc(100% - 32px);max-width:528px;border-radius:20px;padding:10px;z-index:18;box-shadow:0 8px 24px rgba(17,19,23,.14)"><button class="btn" data-a="setsave">${t('save')}</button></div>`;
+  return out;
+}
+
+// ═════════ действия ═════════
+const ACT_ONCE = {};
+async function busy(el, fn) {
+  if (el) { if (el.dataset.busy) return; el.dataset.busy = '1'; el.style.opacity = '.6'; }
+  try { await fn(); } catch (e) { fail(e); } finally { if (el) { delete el.dataset.busy; el.style.opacity = ''; } }
+}
+const refreshHome = () => drop('home', 'slots', 'progress', 'notes');
+const refreshTr = () => drop('tdays', 'clients', 'card', 'payments', 'notes');
+function openTg(username) {
+  if (!username) return toast(t('no_username'), true);
+  const url = 'https://t.me/' + username;
+  if (!safe(() => (TG.openTelegramLink(url), true), false)) window.open(url, '_blank');
+}
+
+const ACT = {
+  go: (d) => { closeSheet(true); go(d.r); },
+  close: () => closeSheet(),
+  ok: async (d, el) => { const f = ACT_ONCE.ok; ACT_ONCE.ok = null; if (f) await busy(el, f); },
+  reload: () => render(),
+  profile: () => profileSheet().catch(fail),
+  tgchat: (d) => openTg(d.u),
+  copy: (d) => { safe(() => navigator.clipboard.writeText(d.v)); hap('success'); toast(t('copied')); },
+  lang: (d, el) => busy(el, async () => { const me = await call('lang', { lang: d.l }); S.lang = me.lang; S.me.lang = me.lang; closeSheet(true); S.cache = {}; render(); }),
+  // клиент
+  confirm: (d, el) => busy(el, async () => { await call('confirm', { bid: d.id }); hap('success'); refreshHome(); render(); }),
+  bk: (d) => { const b = findBooking(d.id); if (b) bookingSheet(b); },
+  move: (d) => { closeSheet(true); S.bk.move = Number(d.id); S.bk.sel = null; go('book'); },
+  movecancel: () => { S.bk.move = null; render(); },
+  cancelbk: (d) => { const b = findBooking(d.id); if (b) bookingSheet(b); },
+  docancel: (d, el) => busy(el, async () => { const r = await call('cancel', { bid: d.id }); hap('success'); closeSheet(); toast(r.late ? t('canceled_late') : t('canceled')); refreshHome(); render(); }),
+  planall: () => { S.planAll = !S.planAll; render(); },
+  bkweek: (d) => { S.bk.ws = addDays(S.bk.ws, Number(d.d)); if (S.bk.ws < today()) S.bk.ws = today(); S.bk.day = S.bk.ws; S.bk.sel = null; render(); },
+  bkday: (d) => { S.bk.day = d.d; S.bk.sel = null; hap(); render(); },
+  bkfmt: (d) => { S.bk.format = d.f; render(); },
+  bksel: (d) => { S.bk.sel = d.ts || null; hap(); render(); },
+  dobook: (d, el) => busy(el, async () => {
+    if (S.bk.move) { await call('move', { bid: S.bk.move, ts: S.bk.sel, format: S.bk.format }); S.bk.move = null; toast(t('moved_ok')); }
+    else { await call('book', { ts: S.bk.sel, format: S.bk.format }); toast(t('booked_ok')); }
+    hap('success'); S.bk.sel = null; refreshHome(); go('home');
+  }),
+  grp: (d) => confirmSheet(t('join_group_q'), '', t('join'), async () => { await call('join_group', { sid: d.sid }); hap('success'); closeSheet(); toast(t('booked_ok')); refreshHome(); render(); }),
+  wait: (d, el) => busy(el, async () => { await call('waitlist', { day: d.d, on: d.on === '1' }); hap('success'); if (d.on === '1') toast(t('wait_ok')); drop('slots'); render(); }),
+  recday: (d) => { const R = S.rec, n = Number(d.d); R.days = R.days.includes(n) ? R.days.filter((x) => x !== n) : [...R.days, n].sort(); hap(); recPreview(); },
+  recweeks: (d) => { S.rec.weeks = d.w === '' ? null : Number(d.w); recPreview(); },
+  recfmt: (d) => { S.rec.format = d.f; recPreview(); },
+  rectake: () => { S.rec.take = !S.rec.take; recPreview(); },
+  recsave: (d, el) => busy(el, async () => { const r = await call('series', recBody(false)); hap('success'); toast(t('rec_done', r.count)); S.rec = null; refreshHome(); go('home'); }),
+  recstop: (d) => confirmSheet(t('stop_q'), t('stop_sub'), t('stop'), async () => { await call('series_stop', { id: d.id }); closeSheet(); refreshHome(); render(); }, true),
+  metric: (d) => { S.prog.metric = d.m; render(); },
+  period: (d) => { S.prog.period = Number(d.p); render(); },
+  measure: (d) => measureSheet(d.m, d.c ? Number(d.c) : null),
+  msm: (d) => { S.ms.metric = d.m; const v = document.getElementById('ms-v').value; document.getElementById('sheet').innerHTML = '<div class="grab"></div>' + S.msDraw(); document.getElementById('ms-v').value = v; },
+  mssave: (d, el) => busy(el, async () => {
+    const v = Number(String(document.getElementById('ms-v').value).replace(',', '.'));
+    if (!(v > 0)) throw Object.assign(new Error(), { code: 'bad_input' });
+    await call('measure', { client: S.ms.client, metric: S.ms.metric, value: v, day: document.getElementById('ms-d').value });
+    hap('success'); closeSheet(); toast(t('saved')); drop('progress', 'home', 'notes', 'card'); render();
+  }),
+  wellbeing: (d) => wellbeingSheet(d.id ? Number(d.id) : null),
+  wbs: (d) => { S.wb.score = Number(d.s); const sl = document.getElementById('wb-sleep').value, tx = document.getElementById('wb-text').value; document.getElementById('sheet').innerHTML = '<div class="grab"></div>' + S.wbDraw(); document.getElementById('wb-sleep').value = sl; document.getElementById('wb-text').value = tx; },
+  wbsave: (d, el) => busy(el, async () => { await call('wellbeing', { bid: S.wb.bid, score: S.wb.score, sleep: String(document.getElementById('wb-sleep').value).replace(',', '.') || null, text: document.getElementById('wb-text').value }); hap('success'); closeSheet(); toast(t('wb_thanks')); drop('notes'); render(); }),
+  cz: (d) => { S.cmp.text = (document.getElementById('cmp-text') || {}).value; S.cmp.zone = d.z; hap(); render(); },
+  cl: (d) => { S.cmp.text = (document.getElementById('cmp-text') || {}).value; S.cmp.level = Number(d.l); hap(); render(); },
+  cw: (d) => { S.cmp.text = (document.getElementById('cmp-text') || {}).value; S.cmp.when = S.cmp.when === d.w ? '' : d.w; render(); },
+  cmpsend: (d, el) => busy(el, async () => { const C = S.cmp; await call('complaint', { zone: C.zone, level: C.level, when: C.when, comment: document.getElementById('cmp-text').value }); hap('success'); toast(t('cmp_sent')); S.cmp = { zone: '', level: 3, when: '' }; refreshHome(); go('home'); }),
+  claim: (d, el) => busy(el, async () => { await call('claim', { pid: d.id }); hap('success'); toast(t('claim_ok')); refreshHome(); S.home = null; closeSheet(); render(); }),
+  nf: (d) => { S.nf = d.k; render(); },
+  notepriv: () => { S.notePriv = !S.notePriv; render(); },
+  notesend: (d, el) => busy(el, async () => {
+    const inp = document.getElementById('note-in'); const text = inp.value.trim(); if (!text) return;
+    await call('note', { client: d.c || null, text, private: S.role === 'trainer' && !!S.notePriv }); inp.value = ''; hap('success'); drop('notes'); render();
+  }),
+  notedel: (d) => confirmSheet(t('delete_q'), '', t('delete'), async () => { await call('note_del', { id: d.id }); closeSheet(); drop('notes'); render(); }, true),
+  notesmore: async (d, el) => busy(el, async () => {
+    const r = route(); const client = r.name === 'cnotes' ? Number(r.arg) : null;
+    const more = await call('notes', { client, kind: S.nf, before: d.before });
+    const key = 'notes:' + (client || '') + ':' + S.nf; S.cache[key].v.items.push(...more.items); render();
+  }),
+  objoin: (d, el) => busy(el, async () => { const me = await call('join', { code: document.getElementById('ob-code').value.trim() }); await start(me); }),
+  obtrainer: (d, el) => busy(el, async () => { const r = await call('become_trainer', { code: document.getElementById('ob-tcode').value.trim() }); await start(r.me); }),
+  // тренер
+  tdweek: (d) => { S.td.day = addDays(S.td.day, Number(d.d)); render(); },
+  tdday: (d) => { S.td.day = d.d; hap(); if (S.td.view === 'week') go('day'); else render(); },
+  weekopen: (d) => { S.td.day = dkey(Number(d.ts)); S.td.openTs = Number(d.ts); go('day'); },
+  openday: (d) => go('day=' + d.ts),
+  sess: (d) => { const it = findSession(d.id); if (it) sessionSheet(it); },
+  collapse: () => { S.collapsed = S.openSess; closeSheet(); render(); },
+  expand: () => { const it = S.collapsed && findSession(S.collapsed.id); if (it) sessionSheet(it); else S.collapsed = null; render(); },
+  attend: (d, el) => busy(el, async () => {
+    const r = await call('attend', { bid: d.id, status: d.s }); hap('success');
+    drop('tdays', 'card', 'payments'); closeSheet(); if (r.status === 'attended') toast(t('marked_done')); await render();
+  }),
+  tcancel: (d) => confirmSheet(t('cancel_q'), t('cancel_tr_sub'), t('cancel'), async () => { await call('cancel', { bid: d.id }); closeSheet(); refreshTr(); render(); }, true),
+  tmove: () => { closeSheet(); toast(t('move_hint')); },
+  sesscancel: (d) => confirmSheet(t('cancel_session_q'), t('cancel_tr_sub'), t('cancel'), async () => { await call('session_cancel', { sid: d.id }); closeSheet(); refreshTr(); render(); }, true),
+  planedit: (d) => { const it = findSession(d.id) || S.openSess; if (it) planEditor(it); },
+  padd: () => { syncPlan(); S.pe.items.push({ n: '', s: '', x: false }); drawPlan(); },
+  px: (d) => { syncPlan(); const x = S.pe.items[Number(d.i)]; x.x = !x.x; drawPlan(); },
+  plancopy: (d, el) => busy(el, async () => {
+    const L = await call('last_plans', { client: S.pe.client });
+    const p = (L.find((x) => Number(x.ts) !== Number(S.pe.ts)) || {}).plan;
+    if (!p) return toast(t('no_prev_plan'));
+    S.pe.title = p.title; S.pe.items = p.items.map((x) => ({ ...x, x: false })); S.pe.note = p.note || ''; drawPlan();
+  }),
+  plandel: (d, el) => busy(el, async () => { await call('plan', { sid: S.pe.sid, plan: null }); closeSheet(); drop('tdays'); render(); }),
+  plansave: (d, el) => busy(el, async () => {
+    syncPlan();
+    await call('plan', { sid: S.pe.sid, ts: S.pe.ts, plan: { title: S.pe.title, items: S.pe.items.filter((x) => x.n.trim()), note: S.pe.note } });
+    hap('success'); closeSheet(); toast(t('plan_saved')); drop('tdays'); await render();
+    const it = findSession(S.pe.sid); if (it) sessionSheet(it);
+  }),
+  cmphandle: (d) => {
+    sheet(`<div class="h2">${t('cmp_handle_title')}</div><p class="small muted sb">${t('cmp_handle_sub')}</p><textarea id="ch-r" class="inp" rows="3" placeholder="${t('cmp_handle_ph')}"></textarea><button class="btn mt12" data-a="chsave" data-id="${d.id}">${t('handled')}</button>`);
+  },
+  chsave: (d, el) => busy(el, async () => { await call('complaint_handle', { id: d.id, reply: document.getElementById('ch-r').value }); hap('success'); closeSheet(); refreshTr(); render(); }),
+  freeslot: (d) => freeSheet(Number(d.ts)),
+  fsfmt: (d) => { S.fs.format = d.f; document.getElementById('sheet').innerHTML = '<div class="grab"></div>' + S.fsDraw(S.cache.clients && S.cache.clients.v); },
+  tbook: (d, el) => busy(el, async () => { await call('tbook', { client: d.c, ts: d.ts || S.fs.ts, format: (S.fs && S.fs.format) || 'gym' }); hap('success'); closeSheet(); toast(t('booked_ok')); refreshTr(); render(); }),
+  newgroup: (d) => groupSheet(d.ts ? Number(d.ts) : null),
+  gsave: (d, el) => busy(el, async () => {
+    const v = (id) => document.getElementById(id).value;
+    const tz = TZ(); const [y, mo, da] = v('g-date').split('-').map(Number); const [h, mi] = v('g-time').split(':').map(Number);
+    const ts = zonedTs(y, mo, da, h, mi, tz);
+    const r = await call('group', { ts, title: v('g-title'), capacity: Number(v('g-cap')), minutes: Number(v('g-min')), weeks: Number(v('g-weeks')), format: v('g-fmt') });
+    hap('success'); closeSheet(); toast(r.skipped ? t('group_skipped', r.ids.length, r.skipped) : t('group_ok')); drop('tdays'); render();
+  }),
+  dayoff: (d) => confirmSheet(t('dayoff_q'), t('dayoff_sub'), t('make_off'), async () => { await call('settings_set', { f: { dayOff: d.d } }); closeSheet(); drop('tdays', 'settings'); render(); }),
+  dayon: (d, el) => busy(el, async () => { await call('settings_set', { f: { dayOn: d.d } }); drop('tdays', 'settings'); render(); }),
+  cf: (d) => { S.cf = d.k; render(); },
+  invite: async (d, el) => busy(el, async () => {
+    const st = S.set || (S.set = await call('settings'));
+    const url = 'https://t.me/share/url?url=' + encodeURIComponent(st.link) + '&text=' + encodeURIComponent(t('invite_text'));
+    if (!safe(() => (TG.openTelegramLink(url), true), false)) { safe(() => navigator.clipboard.writeText(st.link)); toast(t('copied')); }
+  }),
+  cbook: (d) => clientBookSheet(Number(d.c)).catch(fail),
+  clmore: (d) => sheet(`<button class="lrow" style="background:var(--bg)" data-a="goaledit" data-c="${d.id}">${ic('flame', 18)}<span class="s14 b grow">${t('goal')}</span></button><button class="lrow" style="background:var(--bg)" data-a="archive" data-c="${d.id}">${ic('trash', 18, 'var(--bad)')}<span class="s14 b grow" style="color:var(--bad)">${t('archive')}</span></button>`),
+  archive: (d) => confirmSheet(t('archive_q'), t('archive_sub'), t('archive'), async () => { await call('client_update', { client: d.c, f: { archived: true } }); closeSheet(); refreshTr(); go('clients'); }, true),
+  editf: (d) => editFieldSheet(Number(d.c), d.f),
+  efsave: (d, el) => busy(el, async () => { const f = {}; f[d.f] = document.getElementById('ef-v').value; S.cache['card:' + d.c] = { v: await call('client_update', { client: d.c, f }), t: Date.now() }; hap('success'); closeSheet(); render(); }),
+  goaledit: (d) => {
+    const C = (S.cache['card:' + d.c] || {}).v || {}; const g = C.goal || {};
+    sheet(`<div class="h2">${t('goal')}</div><label class="field mt12"><span>${t('goal_text')}</span><input id="gl-t" class="inp" value="${esc(g.text || '')}" placeholder="${t('goal_ph')}"></label>
+      <div class="grid2"><label class="field"><span>${t('metric')}</span><select id="gl-m" class="inp"><option value="">—</option>${METRICS.map((m) => `<option value="${m}" ${g.metric === m ? 'selected' : ''}>${t('m_' + m)}</option>`).join('')}</select></label><label class="field"><span>${t('target')}</span><input id="gl-v" class="inp" inputmode="decimal" value="${g.value == null ? '' : g.value}"></label></div>
+      <label class="field"><span>${t('until_date')}</span><input id="gl-d" class="inp" type="date" value="${g.date || ''}"></label><button class="btn" data-a="glsave" data-c="${d.c}">${t('save')}</button>`);
+  },
+  glsave: (d, el) => busy(el, async () => {
+    const v = (id) => document.getElementById(id).value;
+    S.cache['card:' + d.c] = { v: await call('client_update', { client: d.c, f: { goal: v('gl-t'), goalMetric: v('gl-m'), goalValue: v('gl-v').replace(',', '.'), goalDate: v('gl-d') } }), t: Date.now() };
+    closeSheet(); render();
+  }),
+  recadd: (d) => sheet(`<div class="h2">${t('add_record')}</div><label class="field mt12"><span>${t('exercise')}</span><input id="rc-n" class="inp" placeholder="${t('rec_name_ph')}"></label><label class="field"><span>${t('result')}</span><input id="rc-v" class="inp" placeholder="55 кг"></label><button class="btn" data-a="rcsave" data-c="${d.c}">${t('save')}</button>`),
+  rcsave: (d, el) => busy(el, async () => { await call('record', { client: d.c, name: document.getElementById('rc-n').value, value: document.getElementById('rc-v').value }); hap('success'); closeSheet(); toast(t('saved')); drop('card', 'notes'); render(); }),
+  pkgadd: (d) => pkgSheet(Number(d.c)),
+  pkt: (d) => { S.pk.total = Number(d.n); redrawPk(); },
+  pkd: (d) => { S.pk.days = Number(d.n); redrawPk(); },
+  pkpaid: () => { S.pk.paid = !S.pk.paid; redrawPk(); },
+  pksave: (d, el) => busy(el, async () => { await call('package_add', { client: S.pk.client, total: S.pk.total, days: S.pk.days || null, price: Number(document.getElementById('pk-price').value) || null, paid: S.pk.paid }); hap('success'); closeSheet(); toast(S.pk.paid ? t('saved') : t('pkg_sent')); refreshTr(); render(); }),
+  pconfirm: (d, el) => busy(el, async () => { await call('package_confirm', { pid: d.id, paid: true }); hap('success'); toast(t('paid_ok')); refreshTr(); render(); }),
+  setv: (d) => { S.setf = S.setf || {}; S.setf[d.k] = Number(d.v); render(); },
+  hday: (d) => { const n = Number(d.d); if (S.hours.some((h) => h.dow === n)) S.hours = S.hours.filter((h) => h.dow !== n); else S.hours.push({ dow: n, from: '09:00', to: '18:00' }); render(); },
+  hadd: (d) => { const n = Number(d.d); const last = S.hours.filter((h) => h.dow === n).pop(); S.hours.push({ dow: n, from: last ? last.to : '16:00', to: '21:00' }); render(); },
+  hdel: (d) => { S.hours.splice(Number(d.i), 1); render(); },
+  offadd: (d, el) => busy(el, async () => { const v = document.getElementById('off-d').value; if (!v) return; S.cache.settings = { v: { ...(await call('settings_set', { f: { dayOff: v } })), link: S.set.link }, t: Date.now() }; drop('tdays'); render(); }),
+  offdel: (d, el) => busy(el, async () => { S.cache.settings = { v: { ...(await call('settings_set', { f: { dayOn: d.d } })), link: S.set.link }, t: Date.now() }; drop('tdays'); render(); }),
+  setsave: (d, el) => busy(el, async () => {
+    const f = { ...(S.setf || {}), hours: S.hours };
+    document.querySelectorAll('[data-in="set"]').forEach((i) => { f[i.dataset.k] = i.value; });
+    const r = await call('settings_set', { f });
+    S.cache.settings = { v: { ...r, link: S.set.link }, t: Date.now() }; S.me.trainer = { ...S.me.trainer, ...r }; S.setf = null; S.hours = null;
+    hap('success'); toast(t('saved')); drop('tdays'); render();
+  }),
+};
+function redrawPk() { const pr = document.getElementById('pk-price').value; document.getElementById('sheet').innerHTML = '<div class="grab"></div>' + S.pkDraw(); document.getElementById('pk-price').value = pr; }
+function syncPlan() {
+  const sh = document.getElementById('sheet'); if (!sh) return;
+  sh.querySelectorAll('[data-in]').forEach((el) => {
+    const i = Number(el.dataset.i);
+    if (el.dataset.in === 'pt') S.pe.title = el.value; else if (el.dataset.in === 'pnote') S.pe.note = el.value;
+    else if (el.dataset.in === 'pn') S.pe.items[i].n = el.value; else if (el.dataset.in === 'ps') S.pe.items[i].s = el.value;
+  });
+}
+// локальное время тренера → миллисекунды
+function zonedTs(y, mo, d, h, mi, tz) {
+  const guess = Date.UTC(y, mo - 1, d, h, mi);
+  const parts = new Intl.DateTimeFormat('en-US', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).formatToParts(new Date(guess));
+  const g = Object.fromEntries(parts.map((p) => [p.type, p.value]));
+  const asTz = Date.UTC(Number(g.year), Number(g.month) - 1, Number(g.day), Number(g.hour) % 24, Number(g.minute));
+  return guess - (asTz - guess);
+}
+
+document.addEventListener('click', (e) => {
+  const el = e.target.closest('[data-a]');
+  if (!el || el.disabled) return;
+  const f = ACT[el.dataset.a];
+  if (f) { e.preventDefault(); f(el.dataset, el); }
+});
+document.addEventListener('change', (e) => {
+  const el = e.target;
+  if (el.dataset.in === 'rectime') { S.rec.times[Number(el.dataset.d)] = el.value; recPreview(); }
+  if (el.dataset.in === 'hf') S.hours[Number(el.dataset.i)].from = el.value;
+  if (el.dataset.in === 'ht') S.hours[Number(el.dataset.i)].to = el.value;
+});
+let qTimer = null;
+document.addEventListener('input', (e) => {
+  const el = e.target;
+  if (el.dataset.in === 'q') { S.q = el.value; clearTimeout(qTimer); qTimer = setTimeout(() => { render().then(() => { const i = document.querySelector('[data-in="q"]'); if (i) { i.focus(); i.setSelectionRange(i.value.length, i.value.length); } }); }, 250); }
+  if (el.id === 'note-in') { el.style.height = 'auto'; el.style.height = Math.min(120, el.scrollHeight) + 'px'; }
+});
+window.addEventListener('hashchange', () => { closeSheet(true); render(); window.scrollTo(0, 0); });
+
+// ───────── старт ─────────
+async function start(me) {
+  S.me = me; S.role = me.role; S.lang = me.lang || 'ru';
+  document.documentElement.lang = S.lang;
+  if (me.role === 'trainer') safe(() => call('payments').then((p) => { S.cache.payments = { v: p, t: Date.now() }; S.payBadge = (p.items || []).filter((x) => x.claimed && !x.paid).length; const n = document.getElementById('nav-root'); if (n) n.innerHTML = navHtml(route().name === 'pay' ? 'pay' : ({ week: 'day', client: 'clients', cnotes: 'clients' }[route().name] || route().name || 'day')) + miniHtml(); }));
+  await render();
+}
+async function boot() {
+  safe(() => { TG.ready(); TG.expand(); TG.setHeaderColor('#F2F3F5'); TG.setBackgroundColor('#F2F3F5'); TG.disableVerticalSwipes && TG.disableVerticalSwipes(); });
+  safe(() => TG.BackButton.onClick(() => { if (S.sheetOpen) return closeSheet(); const r = route(); go(r.name === 'cnotes' ? 'client/' + r.arg : S.role === 'trainer' ? (r.name === 'client' ? 'clients' : 'day') : r.name === 'rec' ? 'book' : 'home'); }));
+  S.lang = /^uk/.test(safe(() => TG.initDataUnsafe.user.language_code, '') || navigator.language || '') ? 'uk' : 'ru';
+  if (!CFG.api || !INIT) { app().innerHTML = `<div class="empty" style="padding-top:80px"><div class="h2">${t('open_in_tg')}</div><p>${t('open_in_tg_sub')}</p></div>`; return; }
+  app().innerHTML = skeleton();
+  try {
+    const r = await call('me');
+    if (r.home) S.cache.home = { v: r.home, t: Date.now() };
+    await start(r.me);
+  } catch (e) {
+    app().innerHTML = `<div class="empty" style="padding-top:80px">${e.code === 'auth' ? t('err_auth') : t('err_load')}<br><br><button class="btn sm" onclick="location.reload()">${t('retry')}</button></div>`;
+  }
+  setInterval(() => { if (document.visibilityState === 'visible' && !S.sheetOpen && !document.activeElement.matches('input,textarea,select')) { S.cache = Object.fromEntries(Object.entries(S.cache).filter(([k]) => k === 'settings')); render(); } }, 45000);
+}
+boot();
+</script>
+</body>
+</html>
